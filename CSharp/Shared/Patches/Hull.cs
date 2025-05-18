@@ -11,6 +11,20 @@ namespace NoDecalLimit
 {
   public class HullPatch
   {
+    public static void PatchAll()
+    {
+      Mod.Harmony.Patch(
+        original: typeof(Hull).GetMethod("AddDecal", AccessTools.all, new Type[]{
+          typeof(string),
+          typeof(Vector2),
+          typeof(float),
+          typeof(bool),
+          typeof(int),
+        }),
+        prefix: new HarmonyMethod(typeof(HullPatch).GetMethod("Hull_AddDecal_Replace"))
+      );
+    }
+
     public static bool Hull_AddDecal_Replace(Hull __instance, ref Decal __result, string decalName, Vector2 worldPosition, float scale, bool isNetworkEvent, int? spriteIndex = null)
     {
       Hull _ = __instance;
@@ -21,7 +35,7 @@ namespace NoDecalLimit
         __result = null; return false;
       }
 
-      if (_.decals.Count >= Hull.MaxDecalsPerHull) { __result = null; return false; }
+      //if (_.decals.Count >= Hull.MaxDecalsPerHull) { __result = null; return false; }
 
       var decal = DecalManager.CreateDecal(decalName, scale, worldPosition, _, spriteIndex);
       if (decal != null)

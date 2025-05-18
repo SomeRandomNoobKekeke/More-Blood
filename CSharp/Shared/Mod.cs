@@ -12,7 +12,7 @@ namespace NoDecalLimit
 {
   public partial class Mod : IAssemblyPlugin
   {
-    public Harmony Harmony = new Harmony("no.decal.limit");
+    public static Harmony Harmony = new Harmony("no.decal.limit");
 
     public void Initialize()
     {
@@ -21,17 +21,14 @@ namespace NoDecalLimit
 
     public void PatchAll()
     {
-      Harmony.Patch(
-        original: typeof(Hull).GetMethod("AddDecal", AccessTools.all, new Type[]{
-          typeof(string),
-          typeof(Vector2),
-          typeof(float),
-          typeof(bool),
-          typeof(int),
-        }),
-        prefix: new HarmonyMethod(typeof(HullPatch).GetMethod("Hull_AddDecal_Replace"))
-      );
+      HullPatch.PatchAll();
+
+#if CLIENT
+      CharacterHealthPatch.PatchAll();
+#endif
     }
+
+
 
 
     public static void Log(object msg, Color? cl = null)
