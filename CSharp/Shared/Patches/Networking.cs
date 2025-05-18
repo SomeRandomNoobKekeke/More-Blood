@@ -54,9 +54,8 @@ namespace NoDecalLimit
           _.SharedBackgroundSectionsWrite(msg, backgroundSectionsEventData);
           break;
         case Hull.DecalEventData decalEventData:
-          // no thx
           // msg.WriteRangedInteger(_.decals.Count, 0, Hull.MaxDecalsPerHull);
-          msg.WriteInt32(_.decals.Count);
+          msg.WriteRangedInteger(_.decals.Count, 0, int.MaxValue);
           foreach (Decal decal in _.decals)
           {
             msg.WriteUInt32(decal.Prefab.UintIdentifier);
@@ -120,7 +119,9 @@ namespace NoDecalLimit
           _.paintAmount = _.BackgroundSections.Sum(s => s.ColorStrength);
           break;
         case Hull.EventType.Decal:
-          int decalCount = msg.ReadRangedInteger(0, Hull.MaxDecalsPerHull);
+          //int decalCount = msg.ReadRangedInteger(0, Hull.MaxDecalsPerHull);
+          int decalCount = msg.ReadRangedInteger(0, int.MaxValue);
+
           if (decalCount == 0) { _.decals.Clear(); }
           _.remoteDecals.Clear();
           for (int i = 0; i < decalCount; i++)
