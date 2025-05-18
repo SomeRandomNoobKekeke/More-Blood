@@ -50,21 +50,36 @@ namespace NoDecalLimit
             inWater ? _.Character.Params.BleedParticleWater : _.Character.Params.BleedParticleAir,
             limb.WorldPosition, velocity, 0.0f, _.Character.AnimController.CurrentHull);
 
-        if (blood != null)
+        if (_.Character.CurrentHull is not null)
         {
-          blood.Size *= bloodParticleSize;
-          if (!inWater && !string.IsNullOrEmpty(_.Character.BloodDecalName) && Rand.Range(0.0f, 1.0f) < 0.05f)
+          var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, _.Character.WorldPosition, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
+
+          if (decal != null)
           {
-            blood.OnCollision += (Vector2 pos, Hull hull) =>
-            {
-              var decal = hull?.AddDecal(_.Character.BloodDecalName, pos, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
-              if (decal != null)
-              {
-                decal.FadeTimer = decal.LifeTime - decal.FadeOutTime * 2;
-              }
-            };
+            decal.FadeTimer = decal.LifeTime - decal.FadeOutTime * 2;
           }
         }
+
+        //   if (blood != null)
+        //   {
+        //     blood.Size *= bloodParticleSize;
+        //     if (!inWater && !string.IsNullOrEmpty(_.Character.BloodDecalName) && Rand.Range(0.0f, 1.0f) < 0.05f)
+        //     {
+        //       blood.OnCollision += (Vector2 pos, Hull hull) =>
+        //       {
+        //         var decal = hull?.AddDecal(_.Character.BloodDecalName, _.Character.WorldPosition, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
+
+
+        //         Mod.Log($"pos:{pos} Character.Submarine.WorldPosition:{_.Character.Submarine.WorldPosition} Character.WorldPosition:{_.Character.WorldPosition}");
+
+
+        //         if (decal != null)
+        //         {
+        //           decal.FadeTimer = decal.LifeTime - decal.FadeOutTime * 2;
+        //         }
+        //       };
+        //     }
+        //   }
         _.bloodParticleTimer = MathHelper.Lerp(2, 0.5f, severity);
       }
 
