@@ -9,6 +9,9 @@ using Microsoft.Xna.Framework;
 
 using Barotrauma.Items.Components;
 using Barotrauma.Networking;
+#if CLIENT
+using Barotrauma.MapCreatures.Behavior;
+#endif
 
 namespace NoDecalLimit
 {
@@ -21,6 +24,13 @@ namespace NoDecalLimit
       Mod.Harmony.Patch(
         original: typeof(Hull).GetMethod("ServerEventWrite", AccessTools.all),
         prefix: new HarmonyMethod(typeof(NetworkingPatch).GetMethod("Hull_ServerEventWrite_Replace"))
+      );
+#endif
+
+#if CLIENT
+      Mod.Harmony.Patch(
+        original: typeof(Hull).GetMethod("ClientEventRead", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(NetworkingPatch).GetMethod("Hull_ClientEventRead_Replace"))
       );
 #endif
     }
@@ -67,6 +77,87 @@ namespace NoDecalLimit
     }
 #endif
 
+#if CLIENT
+    public static void Hull_ClientEventRead_Replace(Hull __instance, ref bool __runOriginal, IReadMessage msg, float sendingTime)
+    {
+      Hull _ = __instance;
+      __runOriginal = false;
 
+      Hull.EventType eventType = (Hull.EventType)msg.ReadRangedInteger((int)Hull.EventType.MinValue, (int)Hull.EventType.MaxValue);
+      switch (eventType)
+      {
+        case Hull.EventType.Status:
+          _.remoteOxygenPercentage = msg.ReadRangedSingle(0.0f, 100.0f, 8);
+
+          _.SharedStatusRead(
+              msg,
+              out float newWaterVolume,
+              out Hull.NetworkFireSource[] newFireSources);
+
+          _.remoteWaterVolume = newWaterVolume;
+          _.remoteFireSources = newFireSources;
+          break;
+        case Hull.EventType.BackgroundSections:
+          _.SharedBackgroundSectionRead(
+              msg,
+              bsnu =>
+              {
+                int i = bsnu.SectionIndex;
+                Color color = bsnu.Color;
+                float colorStrength = bsnu.ColorStrength;
+
+                var remoteBackgroundSection = _.remoteBackgroundSections.Find(s => s.Index == i);
+                if (remoteBackgroundSection != null)
+                {
+                  remoteBackgroundSection.SetColorStrength(colorStrength);
+                  remoteBackgroundSection.SetColor(color);
+                }
+                else
+                {
+                  _.remoteBackgroundSections.Add(new BackgroundSection(new Rectangle(0, 0, 1, 1), (ushort)i, colorStrength, color, 0));
+                }
+              }, out int sectorToUpdate);
+          _.paintAmount = _.BackgroundSections.Sum(s => s.ColorStrength);
+          break;
+        case Hull.EventType.Decal:
+          int decalCount = msg.ReadRangedInteger(0, Hull.MaxDecalsPerHull);
+          if (decalCount == 0) { _.decals.Clear(); }
+          _.remoteDecals.Clear();
+          for (int i = 0; i < decalCount; i++)
+          {
+            UInt32 decalId = msg.ReadUInt32();
+            int spriteIndex = msg.ReadByte();
+            float normalizedXPos = msg.ReadRangedSingle(0.0f, 1.0f, 8);
+            float normalizedYPos = msg.ReadRangedSingle(0.0f, 1.0f, 8);
+            float decalScale = msg.ReadRangedSingle(0.0f, 2.0f, 12);
+            _.remoteDecals.Add(new Hull.RemoteDecal(decalId, spriteIndex, new Vector2(normalizedXPos, normalizedYPos), decalScale));
+          }
+          break;
+        case Hull.EventType.BallastFlora:
+          BallastFloraBehavior.NetworkHeader header = (BallastFloraBehavior.NetworkHeader)msg.ReadByte();
+          if (header == BallastFloraBehavior.NetworkHeader.Spawn)
+          {
+            Identifier identifier = msg.ReadIdentifier();
+            float x = msg.ReadSingle();
+            float y = msg.ReadSingle();
+            _.BallastFlora = new BallastFloraBehavior(_, BallastFloraPrefab.Find(identifier), new Vector2(x, y), firstGrowth: true)
+            {
+              PowerConsumptionTimer = msg.ReadSingle()
+            };
+          }
+          else
+          {
+            _.BallastFlora?.ClientRead(msg, header);
+          }
+          break;
+        default:
+          throw new Exception($"Malformed incoming hull event: {eventType} is not a supported event type");
+      }
+
+      if (_.serverUpdateDelay > 0.0f) { return; }
+
+      _.ApplyRemoteState();
+    }
+#endif
   }
 }
