@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 
 namespace NoDecalLimit
 {
-  public class HullPatch
+  public class RemoveDecalLimit
   {
     public static void PatchAll()
     {
@@ -21,7 +21,7 @@ namespace NoDecalLimit
           typeof(bool),
           typeof(int),
         }),
-        prefix: new HarmonyMethod(typeof(HullPatch).GetMethod("Hull_AddDecal_Replace"))
+        prefix: new HarmonyMethod(typeof(RemoveDecalLimit).GetMethod("Hull_AddDecal_Replace"))
       );
     }
 

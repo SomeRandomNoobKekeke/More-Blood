@@ -9,13 +9,13 @@ using Microsoft.Xna.Framework;
 
 namespace NoDecalLimit
 {
-  public class CharacterHealthPatch
+  public class CreateDecalsFromBleeding
   {
     public static void PatchAll()
     {
       Mod.Harmony.Patch(
         original: typeof(CharacterHealth).GetMethod("UpdateBleedingProjSpecific", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CharacterHealthPatch).GetMethod("CharacterHealth_UpdateBleedingProjSpecific_Replace"))
+        prefix: new HarmonyMethod(typeof(CreateDecalsFromBleeding).GetMethod("CharacterHealth_UpdateBleedingProjSpecific_Replace"))
       );
     }
 

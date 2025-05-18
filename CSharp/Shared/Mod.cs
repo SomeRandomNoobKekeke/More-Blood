@@ -21,15 +21,12 @@ namespace NoDecalLimit
 
     public void PatchAll()
     {
-      HullPatch.PatchAll();
+      RemoveDecalLimit.PatchAll();
 
 #if CLIENT
-      CharacterHealthPatch.PatchAll();
+      CreateDecalsFromBleeding.PatchAll();
 #endif
     }
-
-
-
 
     public static void Log(object msg, Color? cl = null)
     {
