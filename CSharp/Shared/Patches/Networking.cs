@@ -121,7 +121,6 @@ namespace NoDecalLimit
         case Hull.EventType.Decal:
           //int decalCount = msg.ReadRangedInteger(0, Hull.MaxDecalsPerHull);
           int decalCount = msg.ReadInt32();
-          Mod.Log($"decalCount:{decalCount}");
           if (decalCount == 0) { _.decals.Clear(); }
           _.remoteDecals.Clear();
           for (int i = 0; i < decalCount; i++)
