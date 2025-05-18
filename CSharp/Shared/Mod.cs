@@ -22,6 +22,7 @@ namespace NoDecalLimit
     public void PatchAll()
     {
       RemoveDecalLimit.PatchAll();
+      NetworkingPatch.PatchAll();
 
 #if CLIENT
       CreateDecalsFromBleeding.PatchAll();

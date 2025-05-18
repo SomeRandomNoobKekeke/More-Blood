@@ -55,7 +55,7 @@ namespace NoDecalLimit
           break;
         case Hull.DecalEventData decalEventData:
           // msg.WriteRangedInteger(_.decals.Count, 0, Hull.MaxDecalsPerHull);
-          msg.WriteRangedInteger(_.decals.Count, 0, int.MaxValue);
+          msg.WriteInt32(_.decals.Count);
           foreach (Decal decal in _.decals)
           {
             msg.WriteUInt32(decal.Prefab.UintIdentifier);
@@ -120,8 +120,8 @@ namespace NoDecalLimit
           break;
         case Hull.EventType.Decal:
           //int decalCount = msg.ReadRangedInteger(0, Hull.MaxDecalsPerHull);
-          int decalCount = msg.ReadRangedInteger(0, int.MaxValue);
-
+          int decalCount = msg.ReadInt32();
+          Mod.Log($"decalCount:{decalCount}");
           if (decalCount == 0) { _.decals.Clear(); }
           _.remoteDecals.Clear();
           for (int i = 0; i < decalCount; i++)
