@@ -7,10 +7,10 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 
-namespace NoDecalLimit
+namespace MoreBlood
 {
   /// <summary>
-  /// Because it they won't be synced in multiplayer.  
+  /// Because they they won't be synced in multiplayer.  
   /// I moved decal creation code to Shared CreateDecalsFromBleeding
   /// </summary>
   public class DontCreateDecalsFromBleedingOnClient
@@ -49,6 +49,7 @@ namespace NoDecalLimit
           velocity = limb.LinearVelocity * 100.0f;
         }
 
+        // Not my todo
         // TODO: use the blood emitter?
         var blood = GameMain.ParticleManager.CreateParticle(
             inWater ? _.Character.Params.BleedParticleWater : _.Character.Params.BleedParticleAir,
@@ -73,9 +74,7 @@ namespace NoDecalLimit
         //       {
         //         var decal = hull?.AddDecal(_.Character.BloodDecalName, _.Character.WorldPosition, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
 
-
         //         Mod.Log($"pos:{pos} Character.Submarine.WorldPosition:{_.Character.Submarine.WorldPosition} Character.WorldPosition:{_.Character.WorldPosition}");
-
 
         //         if (decal != null)
         //         {

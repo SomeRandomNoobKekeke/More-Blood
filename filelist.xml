@@ -1,2 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="No Decal Limit" modversion="1.0.0" corepackage="False" />
+<contentpackage name="No Decal Limit" modversion="1.0.0" corepackage="False">
+  <Decals file="%ModDir%/DecalPrefabs.xml" />
+</contentpackage>

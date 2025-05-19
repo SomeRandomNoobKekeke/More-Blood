@@ -7,7 +7,8 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 
-namespace NoDecalLimit
+
+namespace MoreBlood
 {
   public class CreateDecalsFromBleeding
   {
@@ -19,10 +20,50 @@ namespace NoDecalLimit
       );
     }
 
+    public static void AddBleedingDecal(CharacterHealth _, AfflictionBleeding affliction, Limb targetLimb, float deltaTime)
+    {
+
+
+      //if (affliction.Strength < 10.0f) return;
+
+      //float bloodDecalSize = (affliction.Strength / affliction.Prefab.MaxStrength) * 1.0f + 0.2f;
+      // float bloodDecalSize = targetLimb.LinearVelocity.Length() * 0.1f;
+      float bloodDecalSize = (float)Math.Pow(
+        Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * 6),
+        8
+      );
+
+      Mod.Log(bloodDecalSize);
+      //bloodDecalSize = Math.Clamp(bloodDecalSize, 0.2f, 2.0f);
+
+      float time = (float)(Timing.TotalTime / 10.0);
+
+      float perlin = (float)PerlinNoise.GetPerlin(time, time);
+      //if (perlin < 0.5 || Timing.TotalTime % 2.0 < 0.5) return;
+
+      if (_.Character.CurrentHull is not null)
+      {
+        var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, targetLimb.WorldPosition, bloodDecalSize, isNetworkEvent: false);
+
+
+        // if (decal != null)
+        // {
+        //   decal.FadeTimer = decal.LifeTime - 120;
+        //   Mod.Log(decal.FadeTimer);
+        // }
+      }
+    }
+
     public static void CharacterHealth_Update_Replace(CharacterHealth __instance, ref bool __runOriginal, float deltaTime)
     {
       CharacterHealth _ = __instance;
       __runOriginal = false;
+
+      //TODO move to character creation
+      if (!Mod.PulseOffsets.ContainsKey(_.Character))
+      {
+        Mod.PulseOffsets[_.Character] = Rand.Range(0.0f, 1.0f);
+      }
 
       _.WasInFullHealth = _.vitality >= _.MaxVitality;
 
@@ -72,6 +113,7 @@ namespace NoDecalLimit
           if (affliction is AfflictionBleeding bleeding)
           {
             _.UpdateBleedingProjSpecific(bleeding, targetLimb, deltaTime);
+            AddBleedingDecal(_, bleeding, targetLimb, deltaTime);
           }
           _.Character.StackSpeedMultiplier(affliction.GetSpeedMultiplier());
         }

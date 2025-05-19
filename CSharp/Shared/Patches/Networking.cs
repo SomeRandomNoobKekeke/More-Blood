@@ -13,7 +13,7 @@ using Barotrauma.Networking;
 using Barotrauma.MapCreatures.Behavior;
 #endif
 
-namespace NoDecalLimit
+namespace MoreBlood
 {
   public class NetworkingPatch
   {

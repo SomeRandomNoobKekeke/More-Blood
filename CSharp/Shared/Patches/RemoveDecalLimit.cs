@@ -7,7 +7,7 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 
-namespace NoDecalLimit
+namespace MoreBlood
 {
   public class RemoveDecalLimit
   {
