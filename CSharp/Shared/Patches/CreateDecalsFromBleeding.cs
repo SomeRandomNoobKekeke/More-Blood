@@ -28,12 +28,43 @@ namespace MoreBlood
 
       //float bloodDecalSize = (affliction.Strength / affliction.Prefab.MaxStrength) * 1.0f + 0.2f;
       // float bloodDecalSize = targetLimb.LinearVelocity.Length() * 0.1f;
-      float bloodDecalSize = (float)Math.Pow(
-        Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * 6),
-        8
-      );
 
-      Mod.Log(bloodDecalSize);
+      // Vector2 bloodAccel = new Vector2(
+      //   targetLimb.LinearVelocity.X - _.Character.AnimController.Collider.LinearVelocity.X,
+      //   targetLimb.LinearVelocity.Y - _.Character.AnimController.Collider.LinearVelocity.Y
+      // ) * 20;
+
+      double rotation = -targetLimb.Rotation;
+
+      Vector2 bloodAccel = new Vector2(
+        (float)(Math.Cos(rotation)),
+        (float)(-Math.Sin(rotation))
+      ) * Math.Abs(targetLimb.body.AngularVelocity) * 10;
+
+      Mod.Log($"targetLimb:{targetLimb} rotation:{rotation} targetLimb.body.AngularVelocity:{targetLimb.body.AngularVelocity}");
+
+
+      // bloodAccel += new Vector2(
+      //   (float)(Math.Cos(targetLimb.Rotation) * targetLimb.body.AngularVelocity * mult),
+      //   (float)(Math.Sin(targetLimb.Rotation) * targetLimb.body.AngularVelocity * mult)
+      // );
+
+      float pulseFactor = (float)Math.Pow(
+        Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * 7),
+        8
+      ) * 0.8f;
+
+      float limbSpeedFactor = targetLimb.LinearVelocity.Length() * 0.0f;
+      float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength) * 0.8f;
+
+
+
+      float bloodDecalSize = severityFactor * (0.6f + pulseFactor + limbSpeedFactor);
+
+      if (bloodDecalSize < 0.1f) return;
+
+      Vector2 decalPos = targetLimb.WorldPosition + bloodAccel;
+
       //bloodDecalSize = Math.Clamp(bloodDecalSize, 0.2f, 2.0f);
 
       float time = (float)(Timing.TotalTime / 10.0);
@@ -43,13 +74,11 @@ namespace MoreBlood
 
       if (_.Character.CurrentHull is not null)
       {
-        var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, targetLimb.WorldPosition, bloodDecalSize, isNetworkEvent: false);
-
+        var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, decalPos, bloodDecalSize, isNetworkEvent: false);
 
         // if (decal != null)
         // {
-        //   decal.FadeTimer = decal.LifeTime - 120;
-        //   Mod.Log(decal.FadeTimer);
+        //   decal.FadeTimer = decal.LifeTime - 3;
         // }
       }
     }

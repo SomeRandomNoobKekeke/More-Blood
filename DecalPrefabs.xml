@@ -3,7 +3,8 @@
   <prefabs>
     <blood
       color="102,0,0,255"
-      lifetime="60"
+      lifetime="5"
+      fadeintime="0"
       fadeouttime="1">
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,128,128,128" />
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,254,128,128" />
@@ -11,7 +12,8 @@
     </blood>
     <oldblood
       color="64,0,0,255"
-      lifetime="60"
+      lifetime="5"
+      fadeintime="0"
       fadeouttime="1">
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,128,128,128" />
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,254,128,128" />
@@ -19,7 +21,8 @@
     </oldblood>
     <blackblood
       color="0,0,0,255"
-      lifetime="60"
+      lifetime="5"
+      fadeintime="0"
       fadeouttime="1">
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,128,128,128" />
       <sprite texture="Content/Particles/ParticleAtlas.png" sourcerect="256,254,128,128" />
