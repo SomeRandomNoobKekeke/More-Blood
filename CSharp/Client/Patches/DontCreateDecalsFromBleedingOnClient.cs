@@ -9,13 +9,17 @@ using Microsoft.Xna.Framework;
 
 namespace NoDecalLimit
 {
-  public class CreateDecalsFromBleeding
+  /// <summary>
+  /// Because it they won't be synced in multiplayer.  
+  /// I moved decal creation code to Shared CreateDecalsFromBleeding
+  /// </summary>
+  public class DontCreateDecalsFromBleedingOnClient
   {
     public static void PatchAll()
     {
       Mod.Harmony.Patch(
         original: typeof(CharacterHealth).GetMethod("UpdateBleedingProjSpecific", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CreateDecalsFromBleeding).GetMethod("CharacterHealth_UpdateBleedingProjSpecific_Replace"))
+        prefix: new HarmonyMethod(typeof(DontCreateDecalsFromBleedingOnClient).GetMethod("CharacterHealth_UpdateBleedingProjSpecific_Replace"))
       );
     }
 
@@ -50,15 +54,15 @@ namespace NoDecalLimit
             inWater ? _.Character.Params.BleedParticleWater : _.Character.Params.BleedParticleAir,
             limb.WorldPosition, velocity, 0.0f, _.Character.AnimController.CurrentHull);
 
-        if (_.Character.CurrentHull is not null)
-        {
-          var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, _.Character.WorldPosition, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
+        // if (_.Character.CurrentHull is not null)
+        // {
+        //   var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, _.Character.WorldPosition, Rand.Range(1.0f, 2.0f), isNetworkEvent: true);
 
-          if (decal != null)
-          {
-            decal.FadeTimer = decal.LifeTime - decal.FadeOutTime * 2;
-          }
-        }
+        //   if (decal != null)
+        //   {
+        //     decal.FadeTimer = decal.LifeTime - decal.FadeOutTime * 2;
+        //   }
+        // }
 
         //   if (blood != null)
         //   {

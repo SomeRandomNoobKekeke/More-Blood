@@ -23,9 +23,10 @@ namespace NoDecalLimit
     {
       RemoveDecalLimit.PatchAll();
       NetworkingPatch.PatchAll();
+      CreateDecalsFromBleeding.PatchAll();
 
 #if CLIENT
-      CreateDecalsFromBleeding.PatchAll();
+      DontCreateDecalsFromBleedingOnClient.PatchAll();
 #endif
     }
 
