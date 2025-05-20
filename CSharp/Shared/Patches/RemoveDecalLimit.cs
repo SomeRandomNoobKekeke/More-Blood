@@ -37,7 +37,7 @@ namespace MoreBlood
 
       //if (_.decals.Count >= Hull.MaxDecalsPerHull) { __result = null; return false; }
 
-      var decal = DecalManager.CreateDecal(decalName, scale, worldPosition, _, spriteIndex);
+      var decal = BloodDecal.Create(decalName, scale, worldPosition, _, spriteIndex);
       if (decal != null)
       {
         if (GameMain.NetworkMember is { IsServer: true })

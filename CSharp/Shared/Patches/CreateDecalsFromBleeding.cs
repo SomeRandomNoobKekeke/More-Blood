@@ -29,57 +29,50 @@ namespace MoreBlood
       //float bloodDecalSize = (affliction.Strength / affliction.Prefab.MaxStrength) * 1.0f + 0.2f;
       // float bloodDecalSize = targetLimb.LinearVelocity.Length() * 0.1f;
 
-      // Vector2 bloodAccel = new Vector2(
-      //   targetLimb.LinearVelocity.X - _.Character.AnimController.Collider.LinearVelocity.X,
-      //   targetLimb.LinearVelocity.Y - _.Character.AnimController.Collider.LinearVelocity.Y
-      // ) * 20;
+      Vector2 limbSpeed = targetLimb.LinearVelocity - _.Character.AnimController.Collider.LinearVelocity;
 
-      double rotation = -targetLimb.Rotation;
-
-      Vector2 bloodAccel = new Vector2(
-        (float)(Math.Cos(rotation)),
-        (float)(-Math.Sin(rotation))
-      ) * Math.Abs(targetLimb.body.AngularVelocity) * 10;
-
-      Mod.Log($"targetLimb:{targetLimb} rotation:{rotation} targetLimb.body.AngularVelocity:{targetLimb.body.AngularVelocity}");
+      float vitalityFactor = _.Character.Params.Health.Vitality / 100.0f;
 
 
-      // bloodAccel += new Vector2(
-      //   (float)(Math.Cos(targetLimb.Rotation) * targetLimb.body.AngularVelocity * mult),
-      //   (float)(Math.Sin(targetLimb.Rotation) * targetLimb.body.AngularVelocity * mult)
-      // );
+      float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * 7), 8);
 
-      float pulseFactor = (float)Math.Pow(
-        Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * 7),
-        8
-      ) * 0.8f;
+      float sizeOffset = 0.2f;
 
-      float limbSpeedFactor = targetLimb.LinearVelocity.Length() * 0.0f;
       float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength) * 0.8f;
 
 
 
-      float bloodDecalSize = severityFactor * (0.6f + pulseFactor + limbSpeedFactor);
+      float bloodDecalSize = sizeOffset + 0.5f * vitalityFactor * severityFactor * (0.5f + pulseFactor * 3.0f + limbSpeed.Length() * 0.5f);
 
-      if (bloodDecalSize < 0.1f) return;
+      if (bloodDecalSize < sizeOffset + 0.1f) return;
 
-      Vector2 decalPos = targetLimb.WorldPosition + bloodAccel;
+      Vector2 decalPos = targetLimb.WorldPosition + limbSpeed * 10.0f;
 
       //bloodDecalSize = Math.Clamp(bloodDecalSize, 0.2f, 2.0f);
 
-      float time = (float)(Timing.TotalTime / 10.0);
-
-      float perlin = (float)PerlinNoise.GetPerlin(time, time);
-      //if (perlin < 0.5 || Timing.TotalTime % 2.0 < 0.5) return;
-
       if (_.Character.CurrentHull is not null)
       {
-        var decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, decalPos, bloodDecalSize, isNetworkEvent: false);
+        if (Mod.Random.Next(2) == 0)
+        {
+          Decal decal = _.Character.CurrentHull.AddDecal(_.Character.BloodDecalName, decalPos, bloodDecalSize, isNetworkEvent: false);
 
-        // if (decal != null)
-        // {
-        //   decal.FadeTimer = decal.LifeTime - 3;
-        // }
+          if (decal != null)
+          {
+            decal.FadeTimer = (int)MathHelper.Lerp(0, decal.LifeTime, bloodDecalSize / 4.0f);
+            //decal.Color = Color.Lerp(decal.Color, Color.Black, bloodDecalSize / 4.0f);
+          }
+        }
+        else
+        {
+          Decal decal = _.Character.CurrentHull.AddDecal("oldblood", decalPos, bloodDecalSize, isNetworkEvent: false);
+
+          if (decal != null)
+          {
+            decal.FadeTimer = (int)MathHelper.Lerp(0, decal.LifeTime, bloodDecalSize / 4.0f);
+            //decal.Color = Color.Lerp(decal.Color, Color.Black, bloodDecalSize / 4.0f);
+          }
+        }
+
       }
     }
 

@@ -12,6 +12,10 @@ using Microsoft.Xna.Framework;
 namespace MoreBlood
 {
 
+  /// <summary>
+  /// Mixin for tracking limb acceleration.  
+  /// Unused for now
+  /// </summary>
   public class LimbMixin
   {
     public Vector2 PrevLinearVelocity;
