@@ -25,7 +25,7 @@
     </blood>
     <oldblood
       color="64,0,0,255"
-      lifetime="10"
+      lifetime="20"
       fadeintime="4"
       fadeouttime="1">
       <sprite texture="%ModDir%/Blood.png" sourcerect="0,0,128,128" />
