@@ -13,19 +13,66 @@ namespace MoreBlood
 {
   public class AdvancedDecalPrefab
   {
-    public static AdvancedDecalPrefab RedBlood = new AdvancedDecalPrefab()
+    public static AdvancedDecalPrefab Backup => Prefabs["blood"];
+    public static Dictionary<string, AdvancedDecalPrefab> Prefabs = new()
     {
-      Colors = new List<ColorPoint>(){
-        new ColorPoint(new Color(255, 0, 0, 255), 0.0),
-        new ColorPoint(new Color(32, 0, 0, 255), 0.9),
-        new ColorPoint(new Color(32, 0, 0, 0), 1.0),
+      ["blood"] = new AdvancedDecalPrefab()
+      {
+        Colors = new List<ColorPoint>(){
+          new ColorPoint(new Color(102, 0, 0, 255), 0.0),
+          new ColorPoint(new Color(64, 0, 0, 255), 0.4),
+          new ColorPoint(new Color(32, 0, 0, 255), 0.8),
+          new ColorPoint(new Color(32, 0, 0, 0), 1.0),
+        },
+        Sprites = DecalManager.Prefabs["blood"].Sprites,
+        LifeTime = 60,
+
       },
-      Sprites = DecalManager.Prefabs["blood"].Sprites,
-      LifeTime = 5,
+      ["blackblood"] = new AdvancedDecalPrefab()
+      {
+        Colors = new List<ColorPoint>(){
+          new ColorPoint(new Color(0, 0, 0, 255), 0.0),
+          new ColorPoint(new Color(0, 0, 0, 255), 0.8),
+          new ColorPoint(new Color(0, 0, 0, 0), 1.0),
+        },
+        Sprites = DecalManager.Prefabs["blackblood"].Sprites,
+        LifeTime = 60,
+      },
     };
+
+    public static AdvancedDecalPrefab GetPrefab(string name)
+    {
+      if (Prefabs.ContainsKey(name)) return Prefabs[name];
+      return Backup;
+    }
+
+
+    // public static AdvancedDecalPrefab RedBlood = new AdvancedDecalPrefab()
+    // {
+    //   Colors = new List<ColorPoint>(){
+    //     new ColorPoint(new Color(102, 0, 0, 255), 0.0),
+    //     new ColorPoint(new Color(32, 0, 0, 255), 0.8),
+    //     new ColorPoint(new Color(32, 0, 0, 0), 1.0),
+    //   },
+    //   Sprites = DecalManager.Prefabs["blood"].Sprites,
+    //   LifeTime = 60,
+    // };
+
+    // public static AdvancedDecalPrefab BlackBlood = new AdvancedDecalPrefab()
+    // {
+    //   Colors = new List<ColorPoint>(){
+    //     new ColorPoint(new Color(0, 0, 0, 255), 0.0),
+    //     new ColorPoint(new Color(0, 0, 0, 255), 0.8),
+    //     new ColorPoint(new Color(0, 0, 0, 0), 1.0),
+    //   },
+    //   Sprites = DecalManager.Prefabs["blackblood"].Sprites,
+    //   LifeTime = 60,
+    // };
 
     public List<ColorPoint> Colors = new();
     public List<Sprite> Sprites;
     public double LifeTime;
+    public float MaxScale = 1.8f;
+    public float MinScale = 0.1f;
   }
 }

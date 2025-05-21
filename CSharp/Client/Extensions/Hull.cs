@@ -13,9 +13,10 @@ namespace MoreBlood
 {
   public static class HullExtensions
   {
-    public static void AddDecal(this Hull hull, AdvancedDecal decal, Vector2 worldPosition)
+    public static AdvancedDecal AddDecal(this Hull hull, AdvancedDecal decal, Vector2 worldPosition)
     {
       decal.ConnectToHull(worldPosition, hull);
+      return decal;
     }
   }
 }
