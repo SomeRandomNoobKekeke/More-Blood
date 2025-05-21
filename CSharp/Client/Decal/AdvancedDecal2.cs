@@ -14,7 +14,7 @@ namespace MoreBlood
   public class AdvancedDecal2
   {
     public readonly DecalPrefab Prefab;
-    private Vector2 position;
+
 
     private float fadeTimer;
 
@@ -64,6 +64,7 @@ namespace MoreBlood
       set;
     }
 
+    private Vector2 position;
     public Vector2 WorldPosition
     {
       get

@@ -25,6 +25,21 @@ namespace MoreBlood
         original: typeof(Hull).GetMethod("DrawDecals", AccessTools.all),
         postfix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_DrawDecals_Postfix"))
       );
+
+      harmony.Patch(
+        original: typeof(Hull).GetMethod("IsVisible", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_IsVisible_Postfix"))
+      );
+
+      harmony.Patch(
+        original: typeof(Hull).GetMethod("IsVisible", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_IsVisible_Postfix"))
+      );
+
+      harmony.Patch(
+        original: typeof(Hull).GetMethod("get_DrawBelowWater", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_get_DrawBelowWater_Postfix"))
+      );
     }
 
     public static void Hull_DrawDecals_Prefix(Hull __instance, SpriteBatch spriteBatch)
@@ -35,10 +50,20 @@ namespace MoreBlood
     public static void Hull_DrawDecals_Postfix(Hull __instance, SpriteBatch spriteBatch)
     {
       sw.Restart();
-      __instance.DrawAdvancedDecals();
+      Mixins.GetHullMixin(__instance).DrawAdvancedDecals(spriteBatch);
       sw.Stop();
       GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Decals", sw.ElapsedTicks);
       //GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharacterItems", -sw.ElapsedTicks);
+    }
+
+    public static void Hull_IsVisible_Postfix(Hull __instance, ref bool __result, Rectangle worldView)
+    {
+      __result = __result || Mixins.GetHullMixin(__instance).AdvancedDecals.Count > 0;
+    }
+
+    public static void Hull_get_DrawBelowWater_Postfix(Hull __instance, ref bool __result)
+    {
+      __result = __result || Mixins.GetHullMixin(__instance).AdvancedDecals.Count > 0;
     }
   }
 }

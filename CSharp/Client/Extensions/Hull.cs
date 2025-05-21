@@ -13,9 +13,9 @@ namespace MoreBlood
 {
   public static class HullExtensions
   {
-    public static void DrawAdvancedDecals(this Hull hull)
+    public static void AddDecal(this Hull hull, AdvancedDecal decal, Vector2 worldPosition)
     {
-      HullMixin mixin = Mixins.GetHullMixin(hull);
+      decal.ConnectToHull(worldPosition, hull);
     }
   }
 }

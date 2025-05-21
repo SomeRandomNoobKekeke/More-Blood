@@ -15,17 +15,16 @@ namespace MoreBlood
   {
     public Hull Hull;
 
+    public List<AdvancedDecal> AdvancedDecals = new();
+
     public void DrawAdvancedDecals(SpriteBatch spriteBatch)
     {
-      // Rectangle hullDrawRect = rect;
-      // if (Submarine != null) hullDrawRect.Location += Submarine.DrawPosition.ToPoint();
-
-      // float depth = 1.0f;
-      // foreach (Decal d in decals)
-      // {
-      //   d.Draw(spriteBatch, this, depth);
-      //   depth -= 0.000001f;
-      // }
+      float depth = 1.0f;
+      foreach (AdvancedDecal decal in AdvancedDecals)
+      {
+        decal.Draw(spriteBatch, depth);
+        depth -= 0.000001f;
+      }
     }
 
     public HullMixin(Hull hull)

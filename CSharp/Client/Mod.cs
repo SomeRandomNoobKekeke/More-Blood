@@ -29,7 +29,14 @@ namespace MoreBlood
 
     public void PatchAll()
     {
+      GameMain.LuaCs.Hook.Add("think", "MoreBlood.UpdateDecals", (object[] args) =>
+      {
+        AdvancedDecal.UpdateAll();
+        return null;
+      });
+
       HullPatches.PatchAll(Harmony);
+      FromBleeding.PatchAll(Harmony);
       //       RemoveDecalLimit.PatchAll();
       //       NetworkingPatch.PatchAll();
       //       CreateDecalsFromBleeding.PatchAll();

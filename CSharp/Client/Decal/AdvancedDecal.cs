@@ -14,184 +14,78 @@ namespace MoreBlood
   public class AdvancedDecal
   {
     public static HashSet<AdvancedDecal> Decals = new();
-
-    public readonly DecalPrefab Prefab;
-    private Vector2 position;
-
-    private float fadeTimer;
-
-    public readonly Sprite Sprite;
-
-    public void Draw(SpriteBatch spriteBatch, Hull hull, float depth)
+    public static void UpdateAll()
     {
-      if (Sprite.Texture == null) { return; }
-
-      Vector2 drawPos = position + hull.Rect.Location.ToVector2();
-      if (hull.Submarine != null) { drawPos += hull.Submarine.DrawPosition; }
-      drawPos.Y = -drawPos.Y;
-
-      spriteBatch.Draw(Sprite.Texture, drawPos, clippedSourceRect, Color * GetAlpha(), 0, Vector2.Zero, Scale, SpriteEffects.None, depth);
+      //Mod.Log($"Decal count:{Decals.Count}");
+      foreach (AdvancedDecal decal in Decals) decal.Update();
     }
-
-    public float FadeTimer
-    {
-      get { return fadeTimer; }
-      set { fadeTimer = MathHelper.Clamp(value, 0.0f, LifeTime); }
-    }
-
-    public float FadeInTime
-    {
-      get { return Prefab.FadeInTime; }
-    }
-
-    public float FadeOutTime
-    {
-      get { return Prefab.FadeOutTime; }
-    }
-
-    public float LifeTime
-    {
-      get { return Prefab.LifeTime; }
-    }
-
-    public float BaseAlpha
-    {
-      get;
-      set;
-    } = 1.0f;
-
-    public Color Color
-    {
-      get;
-      set;
-    }
-
+    public AdvancedDecalPrefab Prefab;
+    public Sprite Sprite;
+    public Hull Hull;
+    public double LifeTime;
+    public double CreationTime;
+    public Color CurrentColor;
+    public float Scale = 1;
+    public Vector2 HullPosition;
     public Vector2 WorldPosition
+      => Hull?.Submarine is null ?
+         HullPosition + Hull.Rect.Location.ToVector2() :
+         HullPosition + Hull.Rect.Location.ToVector2() + Hull.Submarine.DrawPosition;
+
+
+    public void ConnectToHull(Vector2 worldPosition, Hull hull)
     {
-      get
+      Hull = hull;
+      HullPosition = worldPosition - hull.WorldRect.Location.ToVector2();
+      Mixins.GetHullMixin(hull).AdvancedDecals.Add(this);
+    }
+
+    public void Draw(SpriteBatch spriteBatch, float depth)
+    {
+      try
       {
-        Vector2 worldPos = position
-            + clippedSourceRect.Size.ToVector2() / 2 * Scale
-            + hull.Rect.Location.ToVector2();
-        if (hull.Submarine != null) { worldPos += hull.Submarine.DrawPosition; }
-        return worldPos;
+        if (Sprite.Texture is null) return;
+
+        Vector2 drawPos = HullPosition + Hull.Rect.Location.ToVector2();
+        if (Hull.Submarine != null) { drawPos += Hull.Submarine.DrawPosition; }
+        drawPos.Y = -drawPos.Y;
+
+        spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, 0, new Vector2(-0.5f, -0.5f), Scale, SpriteEffects.None, depth);
+      }
+      catch (Exception e)
+      {
+        Mod.Log(e);
       }
     }
 
-    public Vector2 CenterPosition
+    public void Update()
     {
-      get;
-      private set;
+      double lambda = (Timing.TotalTimeUnpaused - CreationTime) / LifeTime;
+      if (lambda > 1) Remove();
+      CurrentColor = ColorPoint.Lerp(Prefab.Colors, lambda);
     }
 
-    public Vector2 NonClampedPosition
-    {
-      get;
-      private set;
-    }
-
-    public int SpriteIndex
-    {
-      get;
-      private set;
-    }
-
-    private readonly HashSet<BackgroundSection> affectedSections;
-
-    private readonly Hull hull;
-
-    public readonly float Scale;
-
-    private Rectangle clippedSourceRect;
-
-    private bool cleaned = false;
-
-
-    public void Update(float deltaTime)
-    {
-      fadeTimer += deltaTime;
-    }
-
-    public void ForceRefreshFadeTimer(float val)
-    {
-      cleaned = false;
-      fadeTimer = val;
-    }
-
-    public void StopFadeIn()
-    {
-      Color *= GetAlpha();
-      fadeTimer = Prefab.FadeInTime;
-    }
-
-    public bool AffectsSection(BackgroundSection section)
-    {
-      return affectedSections != null && affectedSections.Contains(section);
-    }
-
-    public void Clean(float val)
-    {
-      cleaned = true;
-      float sizeModifier = MathHelper.Clamp(Sprite.size.X * Sprite.size.Y * Scale / 10000, 1.0f, 25.0f);
-      BaseAlpha -= val * -1 / sizeModifier;
-    }
-
-    private float GetAlpha()
-    {
-      if (fadeTimer < Prefab.FadeInTime && !cleaned)
-      {
-        return BaseAlpha * fadeTimer / Prefab.FadeInTime;
-      }
-      else if (cleaned || fadeTimer > Prefab.LifeTime - Prefab.FadeOutTime)
-      {
-        return BaseAlpha * Math.Min((Prefab.LifeTime - fadeTimer) / Prefab.FadeOutTime, 1.0f);
-      }
-      return BaseAlpha;
-    }
-
-    public AdvancedDecal(DecalPrefab prefab, float scale, Vector2 worldPosition, Hull hull, int? spriteIndex = null)
+    public AdvancedDecal(AdvancedDecalPrefab prefab)
     {
       Prefab = prefab;
+      Sprite = prefab.Sprites[Rand.Range(0, prefab.Sprites.Count)];
+      CurrentColor = Prefab.Colors[0].Color;
+      LifeTime = prefab.LifeTime;
+      CreationTime = Timing.TotalTimeUnpaused;
+      Decals.Add(this);
+    }
 
-      this.hull = hull;
+    public AdvancedDecal(AdvancedDecalPrefab prefab, Vector2 worldPosition, Hull hull) : this(prefab)
+    {
+      ConnectToHull(worldPosition, hull);
+    }
 
-      //transform to hull-relative coordinates so we don't have to worry about the hull moving
-      NonClampedPosition = position = worldPosition - hull.WorldRect.Location.ToVector2();
-
-      Vector2 drawPos = position + hull.Rect.Location.ToVector2();
-
-      SpriteIndex = spriteIndex ?? Rand.Range(0, prefab.Sprites.Count, Rand.RandSync.Unsynced);
-      Sprite = prefab.Sprites[SpriteIndex];
-      Color = prefab.Color;
-
-      Rectangle drawRect = new Rectangle(
-          (int)(drawPos.X - Sprite.size.X / 2 * scale),
-          (int)(drawPos.Y + Sprite.size.Y / 2 * scale),
-          (int)(Sprite.size.X * scale),
-          (int)(Sprite.size.Y * scale));
-
-      Rectangle overFlowAmount = new Rectangle(
-          (int)Math.Max(hull.Rect.X - drawRect.X, 0.0f),
-          (int)Math.Max(drawRect.Y - hull.Rect.Y, 0.0f),
-          (int)Math.Max(drawRect.Right - hull.Rect.Right, 0.0f),
-          (int)Math.Max((hull.Rect.Y - hull.Rect.Height) - (drawRect.Y - drawRect.Height), 0.0f));
-
-      clippedSourceRect = new Rectangle(
-          Sprite.SourceRect.X + (int)(overFlowAmount.X / scale),
-          Sprite.SourceRect.Y + (int)(overFlowAmount.Y / scale),
-          Sprite.SourceRect.Width - (int)((overFlowAmount.X + overFlowAmount.Width) / scale),
-          Sprite.SourceRect.Height - (int)((overFlowAmount.Y + overFlowAmount.Height) / scale));
-
-      CenterPosition = position;
-
-      position -= new Vector2(Sprite.size.X / 2 * scale - overFlowAmount.X, -Sprite.size.Y / 2 * scale + overFlowAmount.Y);
-
-      this.Scale = scale;
-
-      foreach (BackgroundSection section in hull.GetBackgroundSectionsViaContaining(new Rectangle((int)position.X, (int)position.Y - drawRect.Height, drawRect.Width, drawRect.Height)))
+    public void Remove()
+    {
+      Decals.Remove(this);
+      if (Hull != null)
       {
-        affectedSections ??= new HashSet<BackgroundSection>();
-        affectedSections.Add(section);
+        Mixins.GetHullMixin(Hull).AdvancedDecals.Remove(this);
       }
     }
 
