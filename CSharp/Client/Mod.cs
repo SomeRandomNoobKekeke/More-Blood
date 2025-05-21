@@ -36,6 +36,12 @@ namespace MoreBlood
         return null;
       });
 
+      GameMain.LuaCs.Hook.Add("roundStart", "MoreBlood.clearmixins", (object[] args) =>
+      {
+        Mixins.Clear();
+        return null;
+      });
+
       HullPatches.PatchAll(Harmony);
       FromBleeding.PatchAll(Harmony);
       //       RemoveDecalLimit.PatchAll();

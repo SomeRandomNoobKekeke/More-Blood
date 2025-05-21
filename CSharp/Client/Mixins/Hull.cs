@@ -19,7 +19,8 @@ namespace MoreBlood
 
     public void DrawAdvancedDecals(SpriteBatch spriteBatch)
     {
-      float depth = 1.0f;
+      //float depth = 1.0f;
+      float depth = 0.6f;
       foreach (AdvancedDecal decal in AdvancedDecals)
       {
         decal.Draw(spriteBatch, depth);

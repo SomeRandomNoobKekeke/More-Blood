@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework;
 
 namespace MoreBlood
 {
+
+
   public class FromBleeding
   {
     public static void PatchAll(Harmony harmony)
@@ -23,8 +25,6 @@ namespace MoreBlood
         original: typeof(CharacterHealth).GetMethod("UpdateBleedingProjSpecific", AccessTools.all),
         postfix: new HarmonyMethod(typeof(FromBleeding).GetMethod("CharacterHealth_UpdateBleedingProjSpecific_Postfix"))
       );
-
-
     }
 
     public static void CharacterHealth_Update_Replace(CharacterHealth __instance, float deltaTime)
@@ -38,7 +38,10 @@ namespace MoreBlood
       }
     }
 
+    public class BleedingConfig : Config
+    {
 
+    }
 
     public static void AddBleedingDecal(CharacterHealth _, AfflictionBleeding affliction, Limb targetLimb, float deltaTime)
     {
