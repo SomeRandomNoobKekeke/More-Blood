@@ -7,29 +7,42 @@ using System.Diagnostics;
 using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-
+using System.IO;
 
 namespace MoreBlood
 {
   public partial class Mod : IAssemblyPlugin
   {
     public static float Pi2 = (float)(Math.PI * 2.0);
+    public static string ModDir;
+    public static string ConfigPath => Path.Combine(ModDir, Config.DefaultConfigPath);
     public static Dictionary<Character, double> PulseOffsets = new();
     public static Harmony Harmony = new Harmony("more.blood");
     public static Random Random = new Random();
 
-    public static Config Config;
+    public static Config Config = new Config();
 
-    public static bool Debug { get; set; } = true;
+    public static bool Debug;
 
     public void Initialize()
     {
-      //PatchAll();
+      if (!GameMain.LuaCs.PluginPackageManager.TryGetPackageForPlugin<Mod>(out ContentPackage package))
+      {
+        Log($"PluginPackageManager couldn't find ContentPackage for {this} (LoL)");
+        return;
+      }
 
-      //Log(Config);
+      ModDir = Path.GetFullPath(package.Dir);
+      if (ModDir.Contains("LocalMods"))
+      {
+        Debug = true;
+        Log($"Found [{package.Name}] in LocalMods, debug: {Debug}\n");
+      }
 
-      // GameMain.PerformanceCounter.AddElapsedTicks("Draw:HUD", sw.ElapsedTicks);
-      Info("MoreBlood Compiled!");
+      PatchAll();
+
+      Config.Load(ConfigPath);
+      Config.Save(ConfigPath);
     }
 
     public void PatchAll()

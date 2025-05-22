@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 namespace MoreBlood
 {
 
-  public class BleedingConfig : Config
+  public class BleedingConfig : ConfigBase
   {
     public float UnconciousPulseSpeed { get; set; } = 0.6f;
     public float UnconciousBloodFlow { get; set; } = 0.6f;
@@ -28,6 +28,8 @@ namespace MoreBlood
     public float MinDecalLifetime { get; set; } = 0.1f;
     public float SizeToLifetime { get; set; } = 0.25f;
   }
+
+
   public class FromBleeding
   {
     public static void PatchAll(Harmony harmony)

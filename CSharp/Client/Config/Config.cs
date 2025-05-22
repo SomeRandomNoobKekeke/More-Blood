@@ -10,19 +10,18 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Xml;
 using System.Xml.Linq;
-
+using System.IO;
 namespace MoreBlood
 {
-
-
-
-
-  public class Config
+  public class Config : ConfigBase
   {
+    public static string DefaultConfigPath = "Config.xml";
     public BleedingConfig BleedingConfig { get; set; } = new BleedingConfig();
+  }
 
-
-    public IEnumerable<PropertyInfo> Props
+  public class ConfigBase
+  {
+    private IEnumerable<PropertyInfo> Props
     {
       get
       {
@@ -30,6 +29,7 @@ namespace MoreBlood
         {
           yield return pi;
         }
+        yield break;
       }
     }
 
@@ -37,15 +37,15 @@ namespace MoreBlood
     {
       foreach (PropertyInfo pi in Props)
       {
-        if (pi.PropertyType.IsSubclassOf(typeof(Config)))
+        if (pi.PropertyType.IsSubclassOf(typeof(ConfigBase)))
         {
           XElement prop = new XElement(pi.Name);
-          (pi.GetValue(this) as Config).PackProps(prop);
+          (pi.GetValue(this) as ConfigBase).PackProps(prop);
           element.Add(prop);
         }
         else
         {
-          element.Add(new XAttribute(pi.Name, pi.GetValue(this).ToString()));
+          element.Add(new XElement(pi.Name, pi.GetValue(this).ToString()));
         }
       }
 
@@ -56,7 +56,49 @@ namespace MoreBlood
     {
       return PackProps(new XElement(this.GetType().Name));
     }
+
+    public void Save(string path)
+    {
+      XDocument xdoc = new XDocument();
+      xdoc.Add(this.ToXml());
+      xdoc.Save(path);
+    }
+
+    public void FromXML(XElement element)
+    {
+      foreach (XElement child in element.Elements())
+      {
+        PropertyInfo pi = this.GetType().GetProperty(child.Name.ToString());
+        if (pi is null) continue;
+
+        if (pi.PropertyType.IsSubclassOf(typeof(ConfigBase)))
+        {
+          ConfigBase subConfig = (ConfigBase)pi.GetValue(this);
+          if (subConfig is null)
+          {
+            subConfig = (ConfigBase)Activator.CreateInstance(pi.PropertyType);
+            pi.SetValue(this, subConfig);
+          }
+
+          subConfig.FromXML(child);
+        }
+        else
+        {
+          pi.SetValue(this, Parser.Parse(child.Value, pi.PropertyType));
+        }
+      }
+    }
+
+    public void Load(string path)
+    {
+      if (!File.Exists(path))
+      {
+        Mod.Warning($"Couldn't load config from {path}");
+        return;
+      }
+      XDocument xdoc = XDocument.Load(path);
+      this.FromXML(xdoc.Root);
+    }
+
   }
-
-
 }
