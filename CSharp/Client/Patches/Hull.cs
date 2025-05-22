@@ -47,7 +47,7 @@ namespace MoreBlood
       Mixins.GetHullMixin(__instance).DrawAdvancedDecals(spriteBatch);
       sw.Stop();
       GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Decals", sw.ElapsedTicks);
-      //GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharacterItems", -sw.ElapsedTicks);
+      GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", -sw.ElapsedTicks);
     }
 
     public static void Hull_IsVisible_Postfix(Hull __instance, ref bool __result)
