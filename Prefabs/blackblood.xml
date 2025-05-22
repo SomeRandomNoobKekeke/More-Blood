@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AdvancedDecalPrefab BasedOn="blackblood" LifeTime="60" MinScale="0.1" MaxScale="1.8">
+  <ColorPoint Color="0,0,0,255" Lambda="0" />
+  <ColorPoint Color="0,0,0,255" Lambda="0.8" />
+  <ColorPoint Color="0,0,0,0" Lambda="1" />
+</AdvancedDecalPrefab>

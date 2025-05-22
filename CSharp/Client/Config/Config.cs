@@ -17,6 +17,8 @@ namespace MoreBlood
   {
     public static string DefaultConfigPath = "Config.xml";
     public BleedingConfig BleedingConfig { get; set; } = new BleedingConfig();
+    public float DecalDrawDepth { get; set; } = 0.6f;
+    public float DecalCreationInterval { get; set; } = 0.03f;
   }
 
   public class ConfigBase
@@ -52,7 +54,7 @@ namespace MoreBlood
       return element;
     }
 
-    public XElement ToXml()
+    public XElement ToXML()
     {
       return PackProps(new XElement(this.GetType().Name));
     }
@@ -60,7 +62,7 @@ namespace MoreBlood
     public void Save(string path)
     {
       XDocument xdoc = new XDocument();
-      xdoc.Add(this.ToXml());
+      xdoc.Add(this.ToXML());
       xdoc.Save(path);
     }
 
@@ -98,6 +100,11 @@ namespace MoreBlood
       }
       XDocument xdoc = XDocument.Load(path);
       this.FromXML(xdoc.Root);
+    }
+
+    public void Print()
+    {
+      Mod.Log(this.ToXML());
     }
 
   }

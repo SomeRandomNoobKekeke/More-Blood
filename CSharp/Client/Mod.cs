@@ -16,6 +16,7 @@ namespace MoreBlood
     public static float Pi2 = (float)(Math.PI * 2.0);
     public static string ModDir;
     public static string ConfigPath => Path.Combine(ModDir, Config.DefaultConfigPath);
+    public static string PrefabsPath => Path.Combine(ModDir, AdvancedDecalPrefab.DefaultPrefabsPath);
     public static Dictionary<Character, double> PulseOffsets = new();
     public static Harmony Harmony = new Harmony("more.blood");
     public static Random Random = new Random();
@@ -40,9 +41,11 @@ namespace MoreBlood
       }
 
       PatchAll();
+      AddCommands();
 
       Config.Load(ConfigPath);
       Config.Save(ConfigPath);
+      AdvancedDecalPrefab.LoadPrefabs(PrefabsPath);
     }
 
     public void PatchAll()
@@ -59,16 +62,13 @@ namespace MoreBlood
         return null;
       });
 
+      Harmony.Patch(
+        original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
+        postfix: new HarmonyMethod(typeof(Mod).GetMethod("PermitCommands"))
+      );
+
       HullPatches.PatchAll(Harmony);
       FromBleeding.PatchAll(Harmony);
-      //       RemoveDecalLimit.PatchAll();
-      //       NetworkingPatch.PatchAll();
-      //       CreateDecalsFromBleeding.PatchAll();
-      //       MeasureDecalDrawTime.PatchAll();
-
-      // #if CLIENT
-      //       DontCreateDecalsFromBleedingOnClient.PatchAll();
-      // #endif
     }
 
 
@@ -85,6 +85,7 @@ namespace MoreBlood
     public void PreInitPatching() { }
     public void Dispose()
     {
+      RemoveCommands();
       Harmony.UnpatchSelf();
       DestroyStaticVars();
       Mixins.Clear();

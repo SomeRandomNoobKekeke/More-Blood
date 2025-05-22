@@ -8,7 +8,8 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml;
+using System.Xml.Linq;
 namespace MoreBlood
 {
   public struct ColorPoint
@@ -40,6 +41,22 @@ namespace MoreBlood
     public double Lambda;
 
     public ColorPoint(Color color, double l) => (Color, Lambda) = (color, l);
+
+    public XElement ToXML()
+    {
+      return new XElement("ColorPoint",
+        new XAttribute("Color", XMLExtensions.ColorToString(Color)),
+        new XAttribute("Lambda", Lambda)
+      );
+    }
+
+    public static ColorPoint FromXML(XElement element)
+    {
+      return new ColorPoint(
+        XMLExtensions.ParseColor(element.Attribute("Color")?.Value ?? "0,0,0,0"),
+        Parser.Parse<double>(element.Attribute("Lambda")?.Value)
+      );
+    }
   }
 
 
