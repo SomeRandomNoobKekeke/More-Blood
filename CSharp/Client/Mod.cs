@@ -18,11 +18,15 @@ namespace MoreBlood
     public static Harmony Harmony = new Harmony("more.blood");
     public static Random Random = new Random();
 
+    public static Config Config;
+
     public static bool Debug { get; set; } = true;
 
     public void Initialize()
     {
-      PatchAll();
+      //PatchAll();
+
+      //Log(Config);
 
       // GameMain.PerformanceCounter.AddElapsedTicks("Draw:HUD", sw.ElapsedTicks);
       Info("MoreBlood Compiled!");

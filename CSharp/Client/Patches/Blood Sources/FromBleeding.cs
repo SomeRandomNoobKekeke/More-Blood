@@ -11,7 +11,23 @@ using Microsoft.Xna.Framework;
 namespace MoreBlood
 {
 
-
+  public class BleedingConfig : Config
+  {
+    public float UnconciousPulseSpeed { get; set; } = 0.6f;
+    public float UnconciousBloodFlow { get; set; } = 0.6f;
+    public float BasicPulseSpeed { get; set; } = 7.0f;
+    public float PulseSteepness { get; set; } = 8.0f;
+    public float FlowOffset { get; set; } = 0.2f;
+    public float MinFlow { get; set; } = 0.3f;
+    public float GlobalFlowFactor { get; set; } = 0.4f;
+    public float SeverityFlowFactor { get; set; } = 0.8f;
+    public float PulseFlowFactor { get; set; } = 0.8f;
+    public float LimbSpeedFlowFactor { get; set; } = 0.8f;
+    public float LimbSpeedPosFactor { get; set; } = 10.0f;
+    public float RandomPosFactor { get; set; } = 10.0f;
+    public float MinDecalLifetime { get; set; } = 0.1f;
+    public float SizeToLifetime { get; set; } = 0.25f;
+  }
   public class FromBleeding
   {
     public static void PatchAll(Harmony harmony)
@@ -38,44 +54,33 @@ namespace MoreBlood
       }
     }
 
-    public class BleedingConfig : Config
-    {
 
-    }
 
     public static void AddBleedingDecal(CharacterHealth _, AfflictionBleeding affliction, Limb targetLimb, float deltaTime)
     {
-
-
-      //if (affliction.Strength < 10.0f) return;
-
-      //float bloodDecalSize = (affliction.Strength / affliction.Prefab.MaxStrength) * 1.0f + 0.2f;
-      // float bloodDecalSize = targetLimb.LinearVelocity.Length() * 0.1f;
-
-      float conciousnessFactor = _.Character.IsUnconscious ? 0.6f : 1.0f;
-      Vector2 limbSpeed = targetLimb.LinearVelocity - _.Character.AnimController.Collider.LinearVelocity;
-
-      float vitalityFactor = _.Character.Params.Health.Vitality / 100.0f;
-
-      float pulseSpeed = 7 * conciousnessFactor;
-      float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * pulseSpeed), 8) * conciousnessFactor;
-
-      float sizeOffset = 0.2f;
-
-      float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength) * 0.8f;
-
-      float bloodDecalSize = sizeOffset + 0.4f * vitalityFactor * severityFactor * (0.3f + 3.0f * pulseFactor + limbSpeed.Length() * 0.5f);
-
-      if (bloodDecalSize < sizeOffset + 0.1f) return;
-
-      Vector2 decalPos = targetLimb.WorldPosition + limbSpeed * 10.0f + new Vector2(
-        Mod.Random.NextSingle(), Mod.Random.NextSingle()
-      ) * 10.0f;
-
-      //bloodDecalSize = Math.Clamp(bloodDecalSize, 0.2f, 2.0f);
-
       if (_.Character.CurrentHull is not null)
       {
+        BleedingConfig config = Mod.Config.BleedingConfig;
+
+        Vector2 limbSpeed = targetLimb.LinearVelocity - _.Character.AnimController.Collider.LinearVelocity;
+
+        float vitalityFactor = _.Character.Params.Health.Vitality / 100.0f;
+
+        float pulseSpeed = config.BasicPulseSpeed * (_.Character.IsUnconscious ? config.UnconciousPulseSpeed : 1.0f);
+
+        float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * pulseSpeed), config.PulseSteepness) * config.UnconciousBloodFlow;
+
+        float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
+
+        float bloodDecalSize = config.FlowOffset + config.GlobalFlowFactor * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
+
+        if (bloodDecalSize < config.MinFlow) return;
+
+        Vector2 decalPos = targetLimb.WorldPosition + config.LimbSpeedPosFactor * limbSpeed + config.RandomPosFactor * new Vector2(
+          Mod.Random.NextSingle(), Mod.Random.NextSingle()
+        );
+
+
         AdvancedDecal decal = _.Character.CurrentHull?.AddDecal(
           new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.Character.BloodDecalName))
           {
@@ -85,7 +90,7 @@ namespace MoreBlood
         );
 
         //TODO why LifeTime is calculated here? it should be the same for all blood decals of the same size
-        decal.LifeTime = MathHelper.Lerp((float)decal.MaxLifeTime * 0.1f, (float)decal.MaxLifeTime, bloodDecalSize / 4.0f);
+        decal.LifeTime = MathHelper.Lerp((float)decal.MaxLifeTime * config.MinDecalLifetime, (float)decal.MaxLifeTime, bloodDecalSize * config.SizeToLifetime);
       }
     }
 
