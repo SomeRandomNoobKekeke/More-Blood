@@ -7,7 +7,6 @@
     <PulseSteepness>8</PulseSteepness>
     <FlowOffset>0.3</FlowOffset>
     <MinFlow>0.4</MinFlow>
-    <GlobalFlowFactor>1</GlobalFlowFactor>
     <SeverityFlowFactor>0.2</SeverityFlowFactor>
     <PulseFlowFactor>1.4</PulseFlowFactor>
     <LimbSpeedFlowFactor>0.1</LimbSpeedFlowFactor>
@@ -18,4 +17,5 @@
   </BleedingConfig>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>
+  <GlobalBloodAmount>1</GlobalBloodAmount>
 </Config>
