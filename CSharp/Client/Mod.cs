@@ -20,6 +20,7 @@ namespace MoreBlood
     public static Dictionary<Character, double> PulseOffsets = new();
     public static Harmony Harmony = new Harmony("more.blood");
     public static Random Random = new Random();
+    public static VanillaDecalKiller VanillaDecalKiller = new();
 
     public static Config Config = new Config();
 
@@ -42,6 +43,7 @@ namespace MoreBlood
 
       PatchAll();
       AddCommands();
+      VanillaDecalKiller.HideVanillaBlood();
 
       Config.Load(ConfigPath);
       Config.Save(ConfigPath);
@@ -69,8 +71,9 @@ namespace MoreBlood
 
       HullPatches.PatchAll(Harmony);
       FromBleeding.PatchAll(Harmony);
-    }
 
+      Mod.Log(DecalManager.Prefabs["blood"].Color);
+    }
 
 
     public void DestroyStaticVars()
@@ -85,6 +88,7 @@ namespace MoreBlood
     public void PreInitPatching() { }
     public void Dispose()
     {
+      VanillaDecalKiller.RestoreVanillaBlood();
       RemoveCommands();
       Harmony.UnpatchSelf();
       DestroyStaticVars();
