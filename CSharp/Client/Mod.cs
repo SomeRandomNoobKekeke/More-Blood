@@ -71,8 +71,7 @@ namespace MoreBlood
 
       HullPatches.PatchAll(Harmony);
       FromBleeding.PatchAll(Harmony);
-
-      Mod.Log(DecalManager.Prefabs["blood"].Color);
+      FromImpact.PatchAll(Harmony);
     }
 
 

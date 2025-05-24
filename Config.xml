@@ -17,5 +17,5 @@
   </BleedingConfig>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>1</GlobalBloodAmount>
+  <GlobalBloodAmount>0</GlobalBloodAmount>
 </Config>
