@@ -15,12 +15,15 @@ namespace MoreBlood
 {
   public class Config : ConfigBase
   {
+    public static string DebugConfigPath = "Debug Config.xml";
     public static string DefaultConfigPath = "Config.xml";
+    public static string DefaultOldConfigPath = "Old Config.xml";
     public BleedingConfig BleedingConfig { get; set; } = new BleedingConfig();
     public FromImpactConfig FromImpact { get; set; } = new FromImpactConfig();
     public float DecalDrawDepth { get; set; } = 0.6f;
     public float DecalCreationInterval { get; set; } = 0.03f;
     public float GlobalBloodAmount { get; set; } = 1.0f;
+    public string Version { get; set; } = "0.0.0";
   }
 
   public class ConfigBase
@@ -93,15 +96,16 @@ namespace MoreBlood
       }
     }
 
-    public void Load(string path)
+    public bool Load(string path)
     {
       if (!File.Exists(path))
       {
-        Mod.Warning($"Couldn't load config from {path}");
-        return;
+        //Mod.Warning($"Couldn't load config from {path}");
+        return false;
       }
       XDocument xdoc = XDocument.Load(path);
       this.FromXML(xdoc.Root);
+      return true;
     }
 
     public void Print()

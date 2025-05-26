@@ -26,5 +26,5 @@
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>
   <GlobalBloodAmount>1</GlobalBloodAmount>
-  <Version>1.1.0</Version>
+  <Version>0.0.0</Version>
 </Config>

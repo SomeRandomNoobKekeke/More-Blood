@@ -13,10 +13,17 @@ namespace MoreBlood
 {
   public partial class Mod : IAssemblyPlugin
   {
+    //TODO idk where to put these paths
+    public static ContentPackage Package;
+    public static string ConfigPath
+      => Path.Combine(Package.Dir, Config.DefaultConfigPath);
+
+    public static string OldConfigPath => Path.Combine(Package.Dir, Config.DefaultOldConfigPath);
+    public static string PrefabsPath => Path.Combine(Package.Dir, AdvancedDecalPrefab.DefaultPrefabsPath);
+
+
     public static float Pi2 = (float)(Math.PI * 2.0);
-    public static string ModDir;
-    public static string ConfigPath => Path.Combine(ModDir, Config.DefaultConfigPath);
-    public static string PrefabsPath => Path.Combine(ModDir, AdvancedDecalPrefab.DefaultPrefabsPath);
+
     public static Dictionary<Character, double> PulseOffsets = new();
     public static Harmony Harmony = new Harmony("more.blood");
     public static Random Random = new Random();
@@ -33,22 +40,21 @@ namespace MoreBlood
         Log($"PluginPackageManager couldn't find ContentPackage for {this} (LoL)");
         return;
       }
+      Package = package;
 
-      ModDir = Path.GetFullPath(package.Dir);
-      if (ModDir.Contains("LocalMods"))
+      if (Package.Dir.Contains("LocalMods"))
       {
         Debug = true;
-        Log($"Found [{package.Name}] in LocalMods, debug: {Debug}\n");
+        Log($"Found [{Package.Name}] in LocalMods, debug: {Debug}\n");
       }
 
       PatchAll();
       AddCommands();
-      VanillaDecalKiller.HideVanillaBlood();
 
-      Config.Load(ConfigPath);
-      Config.Save(ConfigPath);
-      AdvancedDecalPrefab.LoadPrefabs(PrefabsPath);
-      AdvancedDecalPrefab.SavePrefabs(PrefabsPath);
+
+      ConfigManager.Load();
+
+      VanillaDecalKiller.HideVanillaBlood();
     }
 
     public void PatchAll()

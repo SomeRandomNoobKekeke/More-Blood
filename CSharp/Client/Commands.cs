@@ -37,14 +37,13 @@ namespace MoreBlood
     }
     public static void ReloadBloodConfig_Command(string[] args)
     {
-      Config.Load(ConfigPath);
-      Config.Save(ConfigPath);
+      ConfigManager.Load();
     }
 
     public static void ResetBloodConfig_Command(string[] args)
     {
       Mod.Config = new Config();
-      Config.Save(ConfigPath);
+      ConfigManager.Save();
     }
 
     public static void ReloadBloodPrefabs_Command(string[] args)
