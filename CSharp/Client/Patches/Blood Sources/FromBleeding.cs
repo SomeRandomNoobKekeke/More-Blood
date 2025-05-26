@@ -74,7 +74,7 @@ namespace MoreBlood
 
         float pulseSpeed = config.BasicPulseSpeed * (_.Character.IsUnconscious ? config.UnconciousPulseSpeed : 1.0f);
 
-        float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * pulseSpeed), config.PulseSteepness) * config.UnconciousBloodFlow;
+        float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * pulseSpeed), config.PulseSteepness) * (_.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f);
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 

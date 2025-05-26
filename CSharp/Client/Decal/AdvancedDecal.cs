@@ -32,7 +32,10 @@ namespace MoreBlood
     {
       get => scale;
       //set => scale = value;
-      set => scale = Math.Clamp(value, MinScale, MaxScale);
+      set
+      {
+        scale = Math.Clamp(value, MinScale, MaxScale);
+      }
     }
 
     public float Rotation;

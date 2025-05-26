@@ -27,13 +27,49 @@ namespace MoreBlood
       );
     }
 
+    public class FromImpactConfig : ConfigBase
+    {
+      public float UnconciousPulseSpeed { get; set; } = 0.6f;
+
+    }
+
+    public static void AddDecal(Limb _, float bleedingDamage, Vector2? offset = null)
+    {
+      Vector2 realOffset = offset ?? Vector2.Zero;
+
+      float bloodDecalSize = bleedingDamage * 2;
+      AdvancedDecal decal = _.character.CurrentHull.AddDecal(
+        new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.character.BloodDecalName))
+        {
+          Scale = bloodDecalSize,
+        },
+        _.WorldPosition + realOffset
+      );
+
+      decal.LifeTime = MathHelper.Lerp((float)decal.MaxLifeTime * 0.1f, (float)decal.MaxLifeTime, bloodDecalSize * 0.01f);
+    }
+
+    public static void AddDecalFromProjectile(Limb _, float bleedingDamage, ProjectileDamageContext context)
+    {
+      Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
+      Vector2 offset = direction * 40 + direction * 80 * Mod.Random.NextSingle();
+
+      AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
+    }
+
+    public static void AddDecalFromMelee(Limb _, float bleedingDamage, MeleeDamageContext context)
+    {
+      Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
+      Vector2 offset = direction * 10 + direction * 20 * Mod.Random.NextSingle();
+
+      AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
+    }
+
 
     public static void Limb_AddDamage_Postfix(Limb __instance, ref AttackResult __result, Vector2 simPosition, IEnumerable<Affliction> afflictions, bool playSound, float damageMultiplier = 1, float penetration = 0f, Character attacker = null)
     {
       if (__result.Afflictions is null) return;
       Limb _ = __instance;
-
-
 
       float bleedingDamage = 0;
       try
@@ -48,41 +84,24 @@ namespace MoreBlood
             }
           }
 
-          if (bleedingDamage > 0)
+          if (bleedingDamage > 0 && _.character.CurrentHull is not null)
           {
-            float bloodDecalSize = MathHelper.Clamp(bleedingDamage / 5, 0.1f, 1.0f);
-
-            if (_.character.LastDamageSource is Item item)
+            switch (DamageContext.Current)
             {
-              Vector2 offset = item.body.LinearVelocity * 200;
-              Mod.Log($"{item} {item.body.LinearVelocity}");
+              case ProjectileDamageContext pc:
+                AddDecalFromProjectile(__instance, bleedingDamage, pc);
+                break;
 
-              AdvancedDecal decal = _.character.CurrentHull?.AddDecal(
-                new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.character.BloodDecalName))
-                {
-                  Scale = bloodDecalSize * 10,
-                },
-                _.WorldPosition + offset
-              );
-            }
-            else
-            {
-              AdvancedDecal decal = _.character.CurrentHull?.AddDecal(
-                new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.character.BloodDecalName))
-                {
-                  Scale = bloodDecalSize * 10,
-                },
-                _.WorldPosition
-              );
+              case MeleeDamageContext mc:
+                AddDecalFromMelee(__instance, bleedingDamage, mc);
+                break;
+
+              default: AddDecal(__instance, bleedingDamage); break;
             }
           }
         }
       }
-      catch (Exception e)
-      {
-        Mod.Warning(e.Message);
-      }
-
+      catch (Exception e) { Mod.Warning(e.Message); }
     }
   }
 }

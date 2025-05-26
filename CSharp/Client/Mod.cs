@@ -72,6 +72,7 @@ namespace MoreBlood
       HullPatches.PatchAll(Harmony);
       FromBleeding.PatchAll(Harmony);
       FromImpact.PatchAll(Harmony);
+      TrackDamageSource.PatchAll(Harmony);
     }
 
 

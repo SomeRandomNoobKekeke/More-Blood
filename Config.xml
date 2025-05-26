@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
   <BleedingConfig>
-    <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
-    <UnconciousBloodFlow>0.6</UnconciousBloodFlow>
+    <UnconciousPulseSpeed>0.2</UnconciousPulseSpeed>
+    <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
     <PulseSteepness>8</PulseSteepness>
     <FlowOffset>0.3</FlowOffset>
