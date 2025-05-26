@@ -78,7 +78,7 @@ namespace MoreBlood
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
-        float bloodDecalSize = config.MinFlow + Mod.Config.GlobalBloodAmount * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
+        float bloodDecalSize = config.MinFlow + Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
 
         if (bloodDecalSize < config.FlowCutoff) return;
 

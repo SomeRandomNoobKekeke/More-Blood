@@ -15,6 +15,7 @@ namespace MoreBlood
 {
   public class BleedingConfig : ConfigBase
   {
+    public float BloodAmountFromBleeding { get; set; } = 1.0f;
     public float UnconciousPulseSpeed { get; set; } = 0.6f;
     public float UnconciousBloodFlow { get; set; } = 0.6f;
     public float BasicPulseSpeed { get; set; } = 7.0f;

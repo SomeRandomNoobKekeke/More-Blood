@@ -15,6 +15,7 @@ namespace MoreBlood
 {
   public class FromImpactConfig : ConfigBase
   {
+    public float BleedingDamageToDecalSize { get; set; } = 2.0f;
     public ImpactConfig OfProjectile { get; set; } = new ImpactConfig()
     {
       MinBloodFlyDistance = 40.0f,

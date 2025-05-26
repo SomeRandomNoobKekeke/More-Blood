@@ -12,6 +12,7 @@
     <LimbSpeedFlowFactor>0.1</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
+    <BloodAmountFromBleeding>0</BloodAmountFromBleeding>
   </BleedingConfig>
   <FromImpact>
     <OfProjectile>
@@ -22,6 +23,7 @@
       <MinBloodFlyDistance>10</MinBloodFlyDistance>
       <BloodSpeed>20</BloodSpeed>
     </OfMeleeWeapon>
+    <BleedingDamageToDecalSize>100</BleedingDamageToDecalSize>
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>

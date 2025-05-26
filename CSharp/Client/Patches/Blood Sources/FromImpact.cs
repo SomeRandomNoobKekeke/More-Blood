@@ -33,7 +33,8 @@ namespace MoreBlood
     {
       Vector2 realOffset = offset ?? Vector2.Zero;
 
-      float bloodDecalSize = bleedingDamage * 2;
+      float bloodDecalSize = bleedingDamage * Mod.Config.FromImpact.BleedingDamageToDecalSize * Mod.Config.GlobalBloodAmount;
+
       _.character.CurrentHull.AddDecal(
         AdvancedDecal.Create(_.character.BloodDecalName, bloodDecalSize),
         _.WorldPosition + realOffset
@@ -43,7 +44,9 @@ namespace MoreBlood
     public static void AddDecalFromProjectile(Limb _, float bleedingDamage, ProjectileDamageContext context)
     {
       Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
-      Vector2 offset = direction * Mod.Config.FromImpact.OfProjectile.MinBloodFlyDistance + direction * 80 * Mod.Random.NextSingle();
+      Vector2 offset =
+        direction * Mod.Config.FromImpact.OfProjectile.MinBloodFlyDistance +
+        direction * Mod.Config.FromImpact.OfProjectile.BloodSpeed * Mod.Random.NextSingle();
 
       AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
     }
@@ -51,7 +54,10 @@ namespace MoreBlood
     public static void AddDecalFromMelee(Limb _, float bleedingDamage, MeleeDamageContext context)
     {
       Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
-      Vector2 offset = direction * 10 + direction * 20 * Mod.Random.NextSingle();
+
+      Vector2 offset =
+        direction * Mod.Config.FromImpact.OfMeleeWeapon.MinBloodFlyDistance +
+        direction * Mod.Config.FromImpact.OfMeleeWeapon.BloodSpeed * Mod.Random.NextSingle();
 
       AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
     }
