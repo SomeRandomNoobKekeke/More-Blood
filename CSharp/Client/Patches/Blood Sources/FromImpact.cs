@@ -27,32 +27,23 @@ namespace MoreBlood
       );
     }
 
-    public class FromImpactConfig : ConfigBase
-    {
-      public float UnconciousPulseSpeed { get; set; } = 0.6f;
 
-    }
 
     public static void AddDecal(Limb _, float bleedingDamage, Vector2? offset = null)
     {
       Vector2 realOffset = offset ?? Vector2.Zero;
 
       float bloodDecalSize = bleedingDamage * 2;
-      AdvancedDecal decal = _.character.CurrentHull.AddDecal(
-        new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.character.BloodDecalName))
-        {
-          Scale = bloodDecalSize,
-        },
+      _.character.CurrentHull.AddDecal(
+        AdvancedDecal.Create(_.character.BloodDecalName, bloodDecalSize),
         _.WorldPosition + realOffset
       );
-
-      decal.LifeTime = MathHelper.Lerp((float)decal.MaxLifeTime * 0.1f, (float)decal.MaxLifeTime, bloodDecalSize * 0.01f);
     }
 
     public static void AddDecalFromProjectile(Limb _, float bleedingDamage, ProjectileDamageContext context)
     {
       Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
-      Vector2 offset = direction * 40 + direction * 80 * Mod.Random.NextSingle();
+      Vector2 offset = direction * Mod.Config.FromImpact.OfProjectile.MinBloodFlyDistance + direction * 80 * Mod.Random.NextSingle();
 
       AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
     }

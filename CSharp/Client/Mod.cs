@@ -48,6 +48,7 @@ namespace MoreBlood
       Config.Load(ConfigPath);
       Config.Save(ConfigPath);
       AdvancedDecalPrefab.LoadPrefabs(PrefabsPath);
+      AdvancedDecalPrefab.SavePrefabs(PrefabsPath);
     }
 
     public void PatchAll()

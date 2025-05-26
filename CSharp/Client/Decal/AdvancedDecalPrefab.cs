@@ -27,7 +27,7 @@ namespace MoreBlood
           new ColorPoint(new Color(32, 0, 0, 255), 0.8),
           new ColorPoint(new Color(32, 0, 0, 0), 1.0),
         },
-      LifeTime = 60,
+      MaxLifeTime = 60,
     };
     public static Dictionary<string, AdvancedDecalPrefab> Prefabs = new();
 
@@ -104,18 +104,20 @@ namespace MoreBlood
     }
     public List<ColorPoint> Colors = new();
     public List<Sprite> Sprites;
-    public double LifeTime;
-    public float MaxScale = 1.8f;
-    public float MinScale = 0.1f;
+    public double MaxLifeTime { get; set; } = 10.0f;
+    public float MaxScale { get; set; } = 1.8f;
+    public float MinScale { get; set; } = 0.1f;
+    public float MinDecalLifetime { get; set; } = 0.1f;
+    public float SizeToLifetime { get; set; } = 0.1f;
 
     public XElement ToXML()
     {
-      XElement element = new XElement("AdvancedDecalPrefab",
-        new XAttribute("BasedOn", BasedOn),
-        new XAttribute("LifeTime", LifeTime),
-        new XAttribute("MinScale", MinScale),
-        new XAttribute("MaxScale", MaxScale)
-      );
+      XElement element = new XElement("AdvancedDecalPrefab");
+
+      foreach (PropertyInfo pi in typeof(AdvancedDecalPrefab).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+      {
+        element.Add(new XAttribute(pi.Name, pi.GetValue(this)));
+      }
 
       foreach (ColorPoint cp in Colors)
       {
@@ -125,31 +127,19 @@ namespace MoreBlood
       return element;
     }
 
+
+
     public static AdvancedDecalPrefab FromXML(XElement element)
     {
       AdvancedDecalPrefab prefab = new AdvancedDecalPrefab();
-      if (element.Attribute("BasedOn") != null)
+
+      foreach (XAttribute attribute in element.Attributes())
       {
-        prefab.BasedOn = element.Attribute("BasedOn").Value;
-      }
-      else
-      {
-        prefab.BasedOn = DefaultBasePrefab;
+        PropertyInfo pi = typeof(AdvancedDecalPrefab).GetProperty(attribute.Name.ToString());
+        pi?.SetValue(prefab, Parser.Parse(attribute.Value, pi.PropertyType));
       }
 
-      if (element.Attribute("LifeTime") != null)
-      {
-        prefab.LifeTime = Parser.Parse<double>(element.Attribute("LifeTime").Value);
-      }
-
-      if (element.Attribute("MinScale") != null)
-      {
-        prefab.MinScale = Parser.Parse<float>(element.Attribute("MinScale").Value);
-      }
-      if (element.Attribute("MaxScale") != null)
-      {
-        prefab.MaxScale = Parser.Parse<float>(element.Attribute("MaxScale").Value);
-      }
+      prefab.BasedOn ??= DefaultBasePrefab;
 
       foreach (XElement cp in element.Elements("ColorPoint"))
       {
@@ -166,5 +156,7 @@ namespace MoreBlood
         Mod.Log($"Prefabs[{key}] = {Prefabs[key].ToXML()}");
       }
     }
+
+    public override string ToString() => ToXML().ToString();
   }
 }

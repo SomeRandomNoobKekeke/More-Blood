@@ -13,6 +13,7 @@ namespace MoreBlood
 {
   public class AdvancedDecal
   {
+    public static bool DecalDebug { get; set; }
     public static HashSet<AdvancedDecal> Decals = new();
     public static void UpdateAll()
     {
@@ -23,7 +24,7 @@ namespace MoreBlood
     public Sprite Sprite;
     public Hull Hull;
     public double LifeTime;
-    public double MaxLifeTime;
+
     public double CreationTime;
     public Color CurrentColor;
     public float MaxScale;
@@ -31,12 +32,16 @@ namespace MoreBlood
     private float scale; public float Scale
     {
       get => scale;
-      //set => scale = value;
       set
       {
         scale = Math.Clamp(value, MinScale, MaxScale);
+        LifeTime = MathHelper.Lerp((float)MaxLifeTime * MinDecalLifetime, (float)MaxLifeTime, value * SizeToLifetime);
       }
     }
+
+    public double MaxLifeTime = 10.0f;
+    public float MinDecalLifetime = 0.0f;
+    public float SizeToLifetime = 0.1f;
 
     public float Rotation;
     public Vector2 HullPosition;
@@ -66,12 +71,15 @@ namespace MoreBlood
         if (Hull.Submarine != null) { drawPos += Hull.Submarine.DrawPosition; }
         drawPos.Y = -drawPos.Y;
 
-        // GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Scale, new Vector2(128, 128) * Scale, Color.Yellow * 0.3f);
-
-
         spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, Rotation, HalfSpriteSize, Scale, SpriteEffects.None, depth);
 
-        //GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(2, 2), new Vector2(4, 4), Color.Yellow);
+
+        if (DecalDebug)
+        {
+          GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Scale, new Vector2(128, 128) * Scale, Color.Yellow * 0.3f);
+
+          GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(2, 2), new Vector2(4, 4), Color.Yellow);
+        }
       }
       catch (Exception e) { Mod.Warning($"AdvancedDecal.Draw threw: {e.Message}"); }
     }
@@ -85,16 +93,19 @@ namespace MoreBlood
 
     public AdvancedDecal(AdvancedDecalPrefab prefab)
     {
+      Decals.Add(this);
+      CreationTime = Timing.TotalTimeUnpaused;
+      Rotation = Mod.Random.NextSingle() * Mod.Pi2;
+
       Prefab = prefab;
       Sprite = prefab.Sprites[Rand.Range(0, prefab.Sprites.Count)];
-      CurrentColor = Prefab.Colors[0].Color;
-      LifeTime = prefab.LifeTime;
-      MaxLifeTime = prefab.LifeTime;
-      CreationTime = Timing.TotalTimeUnpaused;
-      Decals.Add(this);
-      Rotation = Mod.Random.NextSingle() * Mod.Pi2;
+      CurrentColor = prefab.Colors[0].Color;
+      LifeTime = prefab.MaxLifeTime;
+      MaxLifeTime = prefab.MaxLifeTime;
       MinScale = prefab.MinScale;
       MaxScale = prefab.MaxScale;
+      SizeToLifetime = prefab.SizeToLifetime;
+      MinDecalLifetime = prefab.MinDecalLifetime;
 
       HalfSpriteSize = new Vector2(
         Sprite.SourceRect.Width / 2.0f,
@@ -102,10 +113,14 @@ namespace MoreBlood
       );
     }
 
+    public AdvancedDecal(AdvancedDecalPrefab prefab, float scale) : this(prefab) => this.Scale = scale;
     public AdvancedDecal(AdvancedDecalPrefab prefab, Vector2 worldPosition, Hull hull) : this(prefab)
     {
       ConnectToHull(worldPosition, hull);
     }
+
+    public static AdvancedDecal Create(string name, float scale)
+      => new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(name), scale);
 
     public void Remove()
     {

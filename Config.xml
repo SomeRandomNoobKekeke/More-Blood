@@ -5,17 +5,25 @@
     <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
     <PulseSteepness>8</PulseSteepness>
-    <FlowOffset>0.3</FlowOffset>
-    <MinFlow>0.4</MinFlow>
+    <MinFlow>0.3</MinFlow>
+    <FlowCutoff>0.4</FlowCutoff>
     <SeverityFlowFactor>0.2</SeverityFlowFactor>
     <PulseFlowFactor>1.4</PulseFlowFactor>
     <LimbSpeedFlowFactor>0.1</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
-    <MinDecalLifetime>0.1</MinDecalLifetime>
-    <SizeToLifetime>0.1</SizeToLifetime>
   </BleedingConfig>
+  <FromImpact>
+    <OfProjectile>
+      <MinBloodFlyDistance>40</MinBloodFlyDistance>
+      <BloodSpeed>80</BloodSpeed>
+    </OfProjectile>
+    <OfMeleeWeapon>
+      <MinBloodFlyDistance>10</MinBloodFlyDistance>
+      <BloodSpeed>20</BloodSpeed>
+    </OfMeleeWeapon>
+  </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>0</GlobalBloodAmount>
+  <GlobalBloodAmount>1</GlobalBloodAmount>
 </Config>

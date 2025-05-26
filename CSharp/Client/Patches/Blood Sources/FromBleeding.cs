@@ -78,25 +78,18 @@ namespace MoreBlood
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
-        float bloodDecalSize = config.FlowOffset + Mod.Config.GlobalBloodAmount * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
+        float bloodDecalSize = config.MinFlow + Mod.Config.GlobalBloodAmount * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
 
-        if (bloodDecalSize < config.MinFlow) return;
+        if (bloodDecalSize < config.FlowCutoff) return;
 
         Vector2 decalPos = targetLimb.WorldPosition + config.LimbSpeedPosFactor * limbSpeed + config.RandomPosFactor * new Vector2(
           Mod.Random.NextSingle(), Mod.Random.NextSingle()
         );
 
-
-        AdvancedDecal decal = _.Character.CurrentHull?.AddDecal(
-          new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(_.Character.BloodDecalName))
-          {
-            Scale = bloodDecalSize,
-          },
+        _.Character.CurrentHull?.AddDecal(
+          AdvancedDecal.Create(_.Character.BloodDecalName, bloodDecalSize),
           decalPos
         );
-
-        //TODO why LifeTime is calculated here? it should be the same for all blood decals of the same size
-        decal.LifeTime = MathHelper.Lerp((float)decal.MaxLifeTime * config.MinDecalLifetime, (float)decal.MaxLifeTime, bloodDecalSize * config.SizeToLifetime);
       }
     }
 
