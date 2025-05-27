@@ -24,7 +24,7 @@
       <BloodSpeed>20</BloodSpeed>
     </OfMeleeWeapon>
     <BloodAmountFromImpact>1</BloodAmountFromImpact>
-    <BleedingDamageToDecalSize>1.8</BleedingDamageToDecalSize>
+    <BleedingDamageToDecalSize>0.18</BleedingDamageToDecalSize>
     <MinSplash>1</MinSplash>
     <Cutoff>0</Cutoff>
   </FromImpact>

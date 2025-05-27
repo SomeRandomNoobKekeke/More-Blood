@@ -34,8 +34,8 @@ namespace MoreBlood
           v =>
           {
             if (v == 0) return "No Blood";
-            if (v == 1) return "Normal";
-            if (v == 2) return "Bloodbath";
+            if (v == 1) return "Balance?";
+            if (v == 2) return "5 FPS";
             return Math.Round(v, 2).ToString();
           },
           Mod.Config.GlobalBloodAmount,
