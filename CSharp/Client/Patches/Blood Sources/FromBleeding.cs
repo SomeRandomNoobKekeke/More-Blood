@@ -99,7 +99,7 @@ namespace MoreBlood
           );
 
 
-        if (bloodDecalSize < config.FlowCutoff) return;
+        if (bloodDecalSize < config.FlowCutoff * Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding) return;
 
         Vector2 decalPos =
           targetLimb.WorldPosition +

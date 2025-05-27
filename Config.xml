@@ -8,8 +8,8 @@
     <PulseSteepness>8</PulseSteepness>
     <MinFlow>0.3</MinFlow>
     <FlowCutoff>0.4</FlowCutoff>
-    <SeverityFlowFactor>0.1</SeverityFlowFactor>
-    <PulseFlowFactor>0.6</PulseFlowFactor>
+    <SeverityFlowFactor>0.15</SeverityFlowFactor>
+    <PulseFlowFactor>0.8</PulseFlowFactor>
     <LimbSpeedFlowFactor>0.06</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
@@ -29,7 +29,7 @@
     <Cutoff>0</Cutoff>
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
-  <DecalCreationInterval>0</DecalCreationInterval>
-  <GlobalBloodAmount>1</GlobalBloodAmount>
+  <DecalCreationInterval>0.03</DecalCreationInterval>
+  <GlobalBloodAmount>1.2</GlobalBloodAmount>
   <Version>1.1.0</Version>
 </Config>
