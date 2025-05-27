@@ -5,11 +5,11 @@
     <UnconciousPulseSpeed>0.3</UnconciousPulseSpeed>
     <UnconciousBloodFlow>0.5</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
-    <PulseSteepness>8</PulseSteepness>
+    <PulseSteepness>16</PulseSteepness>
     <MinFlow>0.3</MinFlow>
     <FlowCutoff>0.4</FlowCutoff>
     <SeverityFlowFactor>0.15</SeverityFlowFactor>
-    <PulseFlowFactor>0.8</PulseFlowFactor>
+    <PulseFlowFactor>1.2</PulseFlowFactor>
     <LimbSpeedFlowFactor>0.06</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
@@ -24,7 +24,7 @@
       <BloodSpeed>20</BloodSpeed>
     </OfMeleeWeapon>
     <BloodAmountFromImpact>1</BloodAmountFromImpact>
-    <BleedingDamageToDecalSize>0.18</BleedingDamageToDecalSize>
+    <BleedingDamageToDecalSize>1.8</BleedingDamageToDecalSize>
     <MinSplash>1</MinSplash>
     <Cutoff>0</Cutoff>
   </FromImpact>
