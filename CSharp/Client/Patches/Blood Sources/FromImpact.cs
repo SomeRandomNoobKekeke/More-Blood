@@ -36,8 +36,10 @@ namespace MoreBlood
       float vitalityFactor = _.character.Params.Health.Vitality / 100.0f;
 
       float bloodDecalSize =
-        Mod.Config.FromImpact.MinSplash +
-        bleedingDamage * Mod.Config.FromImpact.BleedingDamageToDecalSize * Mod.Config.GlobalBloodAmount * Mod.Config.FromImpact.BloodAmountFromImpact * vitalityFactor;
+        Mod.Config.FromImpact.BleedingDamageToDecalSize * Mod.Config.GlobalBloodAmount * (
+          Mod.Config.FromImpact.MinSplash +
+          bleedingDamage * Mod.Config.FromImpact.BloodAmountFromImpact * vitalityFactor
+        );
 
       if (bloodDecalSize < Mod.Config.FromImpact.Cutoff) return;
 

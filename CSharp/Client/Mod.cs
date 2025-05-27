@@ -80,6 +80,7 @@ namespace MoreBlood
       FromBleeding.PatchAll(Harmony);
       FromImpact.PatchAll(Harmony);
       TrackDamageSource.PatchAll(Harmony);
+      HookSettingsMenu.PatchAll(Harmony);
     }
 
 
