@@ -26,7 +26,9 @@ namespace MoreBlood
           if (String.Compare(CurrentConfig.Version, Mod.Package.ModVersion) < 0)
           {
             Mod.Warning($"Blood confing is outdated, moving it to {Config.DefaultOldConfigPath}");
-            CurrentConfig.Save(Mod.OldConfigPath);
+
+            File.Delete(Mod.OldConfigPath);
+            File.Move(Mod.ConfigPath, Mod.OldConfigPath);
           }
         }
 
