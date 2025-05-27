@@ -30,6 +30,6 @@
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>1.2</GlobalBloodAmount>
+  <GlobalBloodAmount>1</GlobalBloodAmount>
   <Version>1.1.0</Version>
 </Config>
