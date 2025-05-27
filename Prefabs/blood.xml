@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<AdvancedDecalPrefab BasedOn="blood" MaxLifeTime="120" MinLifetime="2" MaxSize="100" MinSize="0" RandomLifetimeIncrement="1" RandomLifetimeDecrement="0" SizeToLifetime="40" LifetimeExponent="1.4">
-  <ColorPoint Color="90,0,0,255" Lambda="0" />
+<AdvancedDecalPrefab BasedOn="blood" MaxLifeTime="120" MinLifetime="2" MaxSize="3" MinSize="0.1" RandomLifetimeIncrement="1" RandomLifetimeDecrement="0" SizeToLifetime="40" LifetimeExponent="1.4">
+  <ColorPoint Color="80,0,0,255" Lambda="0" />
   <ColorPoint Color="64,0,0,255" Lambda="0.3" />
   <ColorPoint Color="32,0,0,255" Lambda="0.8" />
   <ColorPoint Color="32,0,0,0" Lambda="1" />
