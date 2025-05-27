@@ -3,14 +3,14 @@
   <BleedingConfig>
     <BasicPulseSpeed>7</BasicPulseSpeed>
     <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
+    <MinFlow>0.2</MinFlow>
     <FlowCutoff>0.4</FlowCutoff>
-    <LimbSpeedFlowFactor>0.06</LimbSpeedFlowFactor>
-    <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
-    <MinFlow>0</MinFlow>
-    <PulseFlowFactor>0.6</PulseFlowFactor>
-    <PulseSteepness>8</PulseSteepness>
-    <RandomPosFactor>10</RandomPosFactor>
     <SeverityFlowFactor>0.5</SeverityFlowFactor>
+    <PulseFlowFactor>0.6</PulseFlowFactor>
+    <LimbSpeedFlowFactor>0.06</LimbSpeedFlowFactor>
+    <PulseSteepness>8</PulseSteepness>
+    <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
+    <RandomPosFactor>10</RandomPosFactor>
     <UnconciousBloodFlow>0.3</UnconciousBloodFlow>
     <UnconciousPulseSpeed>0.3</UnconciousPulseSpeed>
   </BleedingConfig>
