@@ -100,6 +100,7 @@ namespace MoreBlood
     public static void ResetBloodConfig_Command(string[] args)
     {
       Mod.Config = new Config();
+      Mod.Config.Version = Mod.Package.ModVersion;
       ConfigManager.Save();
     }
 
