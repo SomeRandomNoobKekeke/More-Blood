@@ -104,11 +104,13 @@ namespace MoreBlood
     }
     public List<ColorPoint> Colors = new();
     public List<Sprite> Sprites;
-    public double MaxLifeTime { get; set; } = 10.0f;
-    public float MaxScale { get; set; } = 1.8f;
-    public float MinScale { get; set; } = 0.1f;
-    public float MinDecalLifetime { get; set; } = 0.1f;
+    public float MaxLifeTime { get; set; } = 10.0f;
+    public float MinLifetime { get; set; } = 2.0f;
+    public float MaxSize { get; set; } = 1.8f;
+    public float MinSize { get; set; } = 0.1f;
+
     public float SizeToLifetime { get; set; } = 0.1f;
+    public float SizeToLifetimeExponent { get; set; } = 1.0f;
 
     public XElement ToXML()
     {

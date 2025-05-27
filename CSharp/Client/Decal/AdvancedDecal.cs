@@ -13,7 +13,7 @@ namespace MoreBlood
 {
   public class AdvancedDecal
   {
-    public static bool DecalDebug { get; set; }
+    public static bool DecalDebug { get; set; } = true;
     public static HashSet<AdvancedDecal> Decals = new();
     public static void UpdateAll()
     {
@@ -27,21 +27,31 @@ namespace MoreBlood
 
     public double CreationTime;
     public Color CurrentColor;
-    public float MaxScale;
-    public float MinScale;
-    private float scale; public float Scale
+    public float MaxSize;
+    public float MinSize;
+    private float size; public float Size
     {
-      get => scale;
+      get => size;
       set
       {
-        scale = Math.Clamp(value, MinScale, MaxScale);
-        LifeTime = MathHelper.Lerp((float)MaxLifeTime * MinDecalLifetime, (float)MaxLifeTime, value * SizeToLifetime);
+        size = Math.Clamp(value, MinSize, MaxSize);
+
+        double l = Math.Pow(value * SizeToLifetime, SizeToLifetimeExponent);
+
+        LifeTime = (float)Math.Clamp(
+          Math.Pow(value * SizeToLifetime, SizeToLifetimeExponent) /
+          Math.Pow(MaxLifeTime, SizeToLifetimeExponent),
+          MinLifetime,
+          MaxLifeTime
+        );
       }
     }
 
-    public double MaxLifeTime = 10.0f;
-    public float MinDecalLifetime = 0.0f;
+
+    public float MaxLifeTime = 10.0f;
+    public float MinLifetime = 0.0f;
     public float SizeToLifetime = 0.1f;
+    public float SizeToLifetimeExponent = 1.0f;
 
     public float Rotation;
     public Vector2 HullPosition;
@@ -57,8 +67,6 @@ namespace MoreBlood
 
       Mixins.GetHullMixin(hull).AdvancedDecals.Add(this);
       HullPosition = worldPosition - hull.WorldRect.Location.ToVector2();
-
-      //HullPosition -= new Vector2(Sprite.size.X / 2 * Scale, -Sprite.size.Y / 2 * Scale);
     }
 
     public void Draw(SpriteBatch spriteBatch, float depth)
@@ -71,14 +79,15 @@ namespace MoreBlood
         if (Hull.Submarine != null) { drawPos += Hull.Submarine.DrawPosition; }
         drawPos.Y = -drawPos.Y;
 
-        spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, Rotation, HalfSpriteSize, Scale, SpriteEffects.None, depth);
+        spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, Rotation, HalfSpriteSize, Size, SpriteEffects.None, depth);
 
 
         if (DecalDebug)
         {
-          GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Scale, new Vector2(128, 128) * Scale, Color.Yellow * 0.3f);
+          GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Size, new Vector2(128, 128) * Size, Color.Yellow * 0.3f);
 
           GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(2, 2), new Vector2(4, 4), Color.Yellow);
+          GUI.DrawString(spriteBatch, drawPos, $"{Math.Round(Size, 1)}|{Math.Round((Timing.TotalTimeUnpaused - CreationTime))}/{Math.Round(LifeTime).ToString()}", Color.Cyan);
         }
       }
       catch (Exception e) { Mod.Warning($"AdvancedDecal.Draw threw: {e.Message}"); }
@@ -102,10 +111,12 @@ namespace MoreBlood
       CurrentColor = prefab.Colors[0].Color;
       LifeTime = prefab.MaxLifeTime;
       MaxLifeTime = prefab.MaxLifeTime;
-      MinScale = prefab.MinScale;
-      MaxScale = prefab.MaxScale;
+      MinLifetime = Math.Min(prefab.MinLifetime, prefab.MaxLifeTime);
+      MinSize = prefab.MinSize;
+      MaxSize = prefab.MaxSize;
       SizeToLifetime = prefab.SizeToLifetime;
-      MinDecalLifetime = prefab.MinDecalLifetime;
+      SizeToLifetimeExponent = prefab.SizeToLifetimeExponent;
+
 
       HalfSpriteSize = new Vector2(
         Sprite.SourceRect.Width / 2.0f,
@@ -113,14 +124,14 @@ namespace MoreBlood
       );
     }
 
-    public AdvancedDecal(AdvancedDecalPrefab prefab, float scale) : this(prefab) => this.Scale = scale;
+    public AdvancedDecal(AdvancedDecalPrefab prefab, float size) : this(prefab) => this.Size = size;
     public AdvancedDecal(AdvancedDecalPrefab prefab, Vector2 worldPosition, Hull hull) : this(prefab)
     {
       ConnectToHull(worldPosition, hull);
     }
 
-    public static AdvancedDecal Create(string name, float scale)
-      => new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(name), scale);
+    public static AdvancedDecal Create(string name, float size)
+      => new AdvancedDecal(AdvancedDecalPrefab.GetPrefab(name), size);
 
     public void Remove()
     {

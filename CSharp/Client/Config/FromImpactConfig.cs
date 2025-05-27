@@ -15,6 +15,7 @@ namespace MoreBlood
 {
   public class FromImpactConfig : ConfigBase
   {
+    public float BloodAmountFromImpact { get; set; } = 1.0f;
     public float BleedingDamageToDecalSize { get; set; } = 2.0f;
     public ImpactConfig OfProjectile { get; set; } = new ImpactConfig()
     {

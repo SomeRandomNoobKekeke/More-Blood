@@ -25,9 +25,66 @@ namespace MoreBlood
       AddedCommands.Add(new DebugConsole.Command("printbloodconfig", "", PrintBloodConfig_Command));
       AddedCommands.Add(new DebugConsole.Command("bleed", "", Bleed_Command));
       AddedCommands.Add(new DebugConsole.Command("clearblood", "", ClearBlood_Command));
-
+      AddedCommands.Add(new DebugConsole.Command("spawnblood", "spawnblood [size]", SpawnBlood_Command));
+      AddedCommands.Add(new DebugConsole.Command("spawnbloodspectrum", "", SpawnBloodSpectrum_Command));
+      AddedCommands.Add(new DebugConsole.Command("blooddecaldebug", "", BloodDecalDebug_Command));
 
       DebugConsole.Commands.InsertRange(0, AddedCommands);
+    }
+    public static void BloodDecalDebug_Command(string[] args)
+    {
+      AdvancedDecal.DecalDebug = !AdvancedDecal.DecalDebug;
+    }
+    public static void SpawnBlood_Command(string[] args)
+    {
+      Vector2 mousePos = Screen.Selected.Cam.ScreenToWorld(PlayerInput.MousePosition);
+
+      Hull hull = Hull.GetCleanTarget(mousePos);
+
+      if (hull is null)
+      {
+        Mod.Log($"You need a hull");
+        return;
+      }
+
+      float size = 1.0f;
+      if (args.Length > 0) float.TryParse(args[0], out size);
+
+      hull.AddDecal(
+        AdvancedDecal.Create(AdvancedDecalPrefab.DefaultBasePrefab, size),
+        mousePos
+      );
+    }
+
+    public static void SpawnBloodSpectrum_Command(string[] args)
+    {
+      ClearBlood_Command(null);
+
+      Vector2 mousePos = Screen.Selected.Cam.ScreenToWorld(PlayerInput.MousePosition);
+
+      Hull hull = Hull.GetCleanTarget(mousePos);
+
+      if (hull is null)
+      {
+        Mod.Log($"You need a hull");
+        return;
+      }
+
+      int offset = 0;
+      if (args.Length > 0) int.TryParse(args[0], out offset);
+
+      float dx = 0;
+      for (int x = 0; x < 20; x++)
+      {
+        float size = (offset + x) / 10.0f;
+
+        hull.AddDecal(
+          AdvancedDecal.Create(AdvancedDecalPrefab.DefaultBasePrefab, size),
+          mousePos + new Vector2(dx, 0)
+        );
+
+        dx += size * 100;
+      }
     }
 
     public static void ReloadBlood_Command(string[] args)
@@ -49,6 +106,7 @@ namespace MoreBlood
     public static void ReloadBloodPrefabs_Command(string[] args)
     {
       AdvancedDecalPrefab.LoadPrefabs(PrefabsPath);
+      AdvancedDecalPrefab.SavePrefabs(PrefabsPath);
     }
     public static void PrintBloodPrefabs_Command(string[] args)
     {

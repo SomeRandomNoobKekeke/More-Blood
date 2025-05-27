@@ -1,6 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
+  <FromImpact>
+    <BleedingDamageToDecalSize>100</BleedingDamageToDecalSize>
+    <OfProjectile>
+      <MinBloodFlyDistance>40</MinBloodFlyDistance>
+      <BloodSpeed>80</BloodSpeed>
+    </OfProjectile>
+    <OfMeleeWeapon>
+      <MinBloodFlyDistance>10</MinBloodFlyDistance>
+      <BloodSpeed>20</BloodSpeed>
+    </OfMeleeWeapon>
+    <BloodAmountFromImpact>1</BloodAmountFromImpact>
+  </FromImpact>
+  <DecalDrawDepth>0.6</DecalDrawDepth>
+  <DecalCreationInterval>0.2</DecalCreationInterval>
+  <GlobalBloodAmount>1</GlobalBloodAmount>
+  <Version>1.1.0</Version>
   <BleedingConfig>
+    <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
     <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
     <UnconciousBloodFlow>0.6</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
@@ -12,21 +29,5 @@
     <LimbSpeedFlowFactor>0.1</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
-    <BloodAmountFromBleeding>0</BloodAmountFromBleeding>
   </BleedingConfig>
-  <FromImpact>
-    <OfProjectile>
-      <MinBloodFlyDistance>40</MinBloodFlyDistance>
-      <BloodSpeed>80</BloodSpeed>
-    </OfProjectile>
-    <OfMeleeWeapon>
-      <MinBloodFlyDistance>10</MinBloodFlyDistance>
-      <BloodSpeed>20</BloodSpeed>
-    </OfMeleeWeapon>
-    <BleedingDamageToDecalSize>100</BleedingDamageToDecalSize>
-  </FromImpact>
-  <DecalDrawDepth>0.6</DecalDrawDepth>
-  <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>1</GlobalBloodAmount>
-  <Version>1.1.0</Version>
 </Config>
