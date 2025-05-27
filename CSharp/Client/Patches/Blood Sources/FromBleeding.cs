@@ -83,8 +83,7 @@ namespace MoreBlood
               pulseSpeed
             ),
             config.PulseSteepness
-          ) *
-          (_.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f);
+          );
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
@@ -98,6 +97,7 @@ namespace MoreBlood
             )
           );
 
+        bloodDecalSize *= _.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f;
 
         if (bloodDecalSize < config.FlowCutoff * Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding) return;
 
