@@ -74,7 +74,7 @@ namespace MoreBlood
       if (args.Length > 0) int.TryParse(args[0], out offset);
 
       float dx = 0;
-      for (int x = 0; x < 20; x++)
+      for (int x = 0; x <= 20; x++)
       {
         float size = (offset + x) / 10.0f;
 
@@ -122,15 +122,25 @@ namespace MoreBlood
       Mixins.Clear();
     }
 
+    public static float? LastBleedingAmount;
     public static void Bleed_Command(string[] args)
     {
       if (Character.Controlled is null) return;
+
+      DebugConsole.ExecuteCommand("revive");
+
+      float bleedingAmount = LastBleedingAmount ?? 100.0f;
+      if (args.Length > 0)
+      {
+        float.TryParse(args[0], out bleedingAmount);
+        LastBleedingAmount = bleedingAmount;
+      }
 
       AfflictionPrefab afflictionPrefab = AfflictionPrefab.Bleeding;
 
       Limb targetLimb = Character.Controlled.AnimController.Limbs.FirstOrDefault(l => l.type.ToString().Equals("righthand", StringComparison.OrdinalIgnoreCase));
 
-      Character.Controlled.CharacterHealth.ApplyAffliction(targetLimb ?? Character.Controlled.AnimController.MainLimb, afflictionPrefab.Instantiate(100));
+      Character.Controlled.CharacterHealth.ApplyAffliction(targetLimb ?? Character.Controlled.AnimController.MainLimb, afflictionPrefab.Instantiate(bleedingAmount));
     }
 
     public static void RemoveCommands()

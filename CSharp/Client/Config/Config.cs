@@ -28,21 +28,13 @@ namespace MoreBlood
 
   public class ConfigBase
   {
-    private IEnumerable<PropertyInfo> Props
-    {
-      get
-      {
-        foreach (PropertyInfo pi in this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-        {
-          yield return pi;
-        }
-        yield break;
-      }
-    }
-
     private XElement PackProps(XElement element)
     {
-      foreach (PropertyInfo pi in Props)
+      List<PropertyInfo> props = new List<PropertyInfo>(this.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance));
+
+      props.Sort((a, b) => string.Compare(a.Name, b.Name));
+
+      foreach (PropertyInfo pi in props)
       {
         if (pi.PropertyType.IsSubclassOf(typeof(ConfigBase)))
         {
@@ -50,7 +42,11 @@ namespace MoreBlood
           (pi.GetValue(this) as ConfigBase).PackProps(prop);
           element.Add(prop);
         }
-        else
+      }
+
+      foreach (PropertyInfo pi in props)
+      {
+        if (!pi.PropertyType.IsSubclassOf(typeof(ConfigBase)))
         {
           element.Add(new XElement(pi.Name, pi.GetValue(this).ToString()));
         }

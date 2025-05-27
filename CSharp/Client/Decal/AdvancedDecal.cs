@@ -13,7 +13,7 @@ namespace MoreBlood
 {
   public class AdvancedDecal
   {
-    public static bool DecalDebug { get; set; } = true;
+    public static bool DecalDebug { get; set; } = false;
     public static HashSet<AdvancedDecal> Decals = new();
     public static void UpdateAll()
     {
@@ -36,14 +36,22 @@ namespace MoreBlood
       {
         size = Math.Clamp(value, MinSize, MaxSize);
 
-        double l = Math.Pow(value * SizeToLifetime, SizeToLifetimeExponent);
+        double l = (
+          value * SizeToLifetime * (
+            1
+            + RandomLifetimeIncrement * Mod.Random.NextSingle()
+            - RandomLifetimeDecrement * Mod.Random.NextSingle()
+          )
+        ) / MaxLifeTime;
 
-        LifeTime = (float)Math.Clamp(
-          Math.Pow(value * SizeToLifetime, SizeToLifetimeExponent) /
-          Math.Pow(MaxLifeTime, SizeToLifetimeExponent),
-          MinLifetime,
-          MaxLifeTime
-        );
+        l = Math.Pow(Math.Max(0, l), LifetimeExponent);
+
+        LifeTime = (float)Math.Clamp(l * MaxLifeTime, MinLifetime, MaxLifeTime);
+
+        if (DecalDebug)
+        {
+          Mod.Log($"new decal| input size:{Math.Round(value, 2)} -> SizeToLifetime:{Math.Round(l * MaxLifeTime, 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
+        }
       }
     }
 
@@ -51,7 +59,9 @@ namespace MoreBlood
     public float MaxLifeTime = 10.0f;
     public float MinLifetime = 0.0f;
     public float SizeToLifetime = 0.1f;
-    public float SizeToLifetimeExponent = 1.0f;
+    public float LifetimeExponent = 1.0f;
+    public float RandomLifetimeIncrement = 0.0f;
+    public float RandomLifetimeDecrement = 0.0f;
 
     public float Rotation;
     public Vector2 HullPosition;
@@ -86,7 +96,7 @@ namespace MoreBlood
         {
           GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Size, new Vector2(128, 128) * Size, Color.Yellow * 0.3f);
 
-          GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(2, 2), new Vector2(4, 4), Color.Yellow);
+          //GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(2, 2), new Vector2(4, 4), Color.Yellow);
           GUI.DrawString(spriteBatch, drawPos, $"{Math.Round(Size, 1)}|{Math.Round((Timing.TotalTimeUnpaused - CreationTime))}/{Math.Round(LifeTime).ToString()}", Color.Cyan);
         }
       }
@@ -115,7 +125,9 @@ namespace MoreBlood
       MinSize = prefab.MinSize;
       MaxSize = prefab.MaxSize;
       SizeToLifetime = prefab.SizeToLifetime;
-      SizeToLifetimeExponent = prefab.SizeToLifetimeExponent;
+      LifetimeExponent = prefab.LifetimeExponent;
+      RandomLifetimeIncrement = prefab.RandomLifetimeIncrement;
+      RandomLifetimeDecrement = prefab.RandomLifetimeDecrement;
 
 
       HalfSpriteSize = new Vector2(

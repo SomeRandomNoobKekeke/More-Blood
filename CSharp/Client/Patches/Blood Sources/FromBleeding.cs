@@ -72,19 +72,36 @@ namespace MoreBlood
 
         float vitalityFactor = _.Character.Params.Health.Vitality / 100.0f;
 
-        float pulseSpeed = config.BasicPulseSpeed * (_.Character.IsUnconscious ? config.UnconciousPulseSpeed : 1.0f);
+        float pulseSpeed =
+          config.BasicPulseSpeed *
+          (_.Character.IsUnconscious ? config.UnconciousPulseSpeed : 1.0f);
 
-        float pulseFactor = (float)Math.Pow(Math.Sin((Timing.TotalTime - Mod.PulseOffsets[_.Character]) * pulseSpeed), config.PulseSteepness) * (_.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f);
+        float pulseFactor =
+          (float)Math.Pow(
+            Math.Sin(
+              (Timing.TotalTime - Mod.PulseOffsets[_.Character]) *
+              pulseSpeed
+            ),
+            config.PulseSteepness
+          ) *
+          (_.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f);
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
-        float bloodDecalSize = config.MinFlow + Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding * vitalityFactor * severityFactor * (config.SeverityFlowFactor + config.PulseFlowFactor * pulseFactor + config.LimbSpeedFlowFactor * limbSpeed.Length());
+        float bloodDecalSize =
+          config.MinFlow +
+          Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding * vitalityFactor * severityFactor * (
+            config.SeverityFlowFactor +
+            config.PulseFlowFactor * pulseFactor +
+            config.LimbSpeedFlowFactor * limbSpeed.Length()
+          );
 
         if (bloodDecalSize < config.FlowCutoff) return;
 
-        Vector2 decalPos = targetLimb.WorldPosition + config.LimbSpeedPosFactor * limbSpeed + config.RandomPosFactor * new Vector2(
-          Mod.Random.NextSingle(), Mod.Random.NextSingle()
-        );
+        Vector2 decalPos =
+          targetLimb.WorldPosition +
+          config.LimbSpeedPosFactor * limbSpeed +
+          config.RandomPosFactor * new Vector2(Mod.Random.NextSingle(), Mod.Random.NextSingle());
 
         _.Character.CurrentHull?.AddDecal(
           AdvancedDecal.Create(_.Character.BloodDecalName, bloodDecalSize),

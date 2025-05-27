@@ -33,7 +33,13 @@ namespace MoreBlood
     {
       Vector2 realOffset = offset ?? Vector2.Zero;
 
-      float bloodDecalSize = bleedingDamage * Mod.Config.FromImpact.BleedingDamageToDecalSize * Mod.Config.GlobalBloodAmount * Mod.Config.FromImpact.BloodAmountFromImpact;
+      float vitalityFactor = _.character.Params.Health.Vitality / 100.0f;
+
+      float bloodDecalSize =
+        Mod.Config.FromImpact.MinSplash +
+        bleedingDamage * Mod.Config.FromImpact.BleedingDamageToDecalSize * Mod.Config.GlobalBloodAmount * Mod.Config.FromImpact.BloodAmountFromImpact * vitalityFactor;
+
+      if (bloodDecalSize < Mod.Config.FromImpact.Cutoff) return;
 
       _.character.CurrentHull.AddDecal(
         AdvancedDecal.Create(_.character.BloodDecalName, bloodDecalSize),

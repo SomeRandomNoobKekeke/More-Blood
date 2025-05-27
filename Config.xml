@@ -1,33 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
+  <BleedingConfig>
+    <BasicPulseSpeed>7</BasicPulseSpeed>
+    <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
+    <FlowCutoff>0.4</FlowCutoff>
+    <LimbSpeedFlowFactor>0.06</LimbSpeedFlowFactor>
+    <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
+    <MinFlow>0</MinFlow>
+    <PulseFlowFactor>0.6</PulseFlowFactor>
+    <PulseSteepness>8</PulseSteepness>
+    <RandomPosFactor>10</RandomPosFactor>
+    <SeverityFlowFactor>0.5</SeverityFlowFactor>
+    <UnconciousBloodFlow>0.3</UnconciousBloodFlow>
+    <UnconciousPulseSpeed>0.3</UnconciousPulseSpeed>
+  </BleedingConfig>
   <FromImpact>
-    <BleedingDamageToDecalSize>100</BleedingDamageToDecalSize>
-    <OfProjectile>
-      <MinBloodFlyDistance>40</MinBloodFlyDistance>
-      <BloodSpeed>80</BloodSpeed>
-    </OfProjectile>
     <OfMeleeWeapon>
-      <MinBloodFlyDistance>10</MinBloodFlyDistance>
       <BloodSpeed>20</BloodSpeed>
+      <MinBloodFlyDistance>10</MinBloodFlyDistance>
     </OfMeleeWeapon>
-    <BloodAmountFromImpact>1</BloodAmountFromImpact>
+    <OfProjectile>
+      <BloodSpeed>80</BloodSpeed>
+      <MinBloodFlyDistance>40</MinBloodFlyDistance>
+    </OfProjectile>
+    <BleedingDamageToDecalSize>0.4</BleedingDamageToDecalSize>
+    <BloodAmountFromImpact>0</BloodAmountFromImpact>
+    <Cutoff>0</Cutoff>
+    <MinSplash>0.4</MinSplash>
   </FromImpact>
+  <DecalCreationInterval>0</DecalCreationInterval>
   <DecalDrawDepth>0.6</DecalDrawDepth>
-  <DecalCreationInterval>0.2</DecalCreationInterval>
   <GlobalBloodAmount>1</GlobalBloodAmount>
   <Version>1.1.0</Version>
-  <BleedingConfig>
-    <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
-    <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
-    <UnconciousBloodFlow>0.6</UnconciousBloodFlow>
-    <BasicPulseSpeed>7</BasicPulseSpeed>
-    <PulseSteepness>8</PulseSteepness>
-    <MinFlow>0.3</MinFlow>
-    <FlowCutoff>0.4</FlowCutoff>
-    <SeverityFlowFactor>0.2</SeverityFlowFactor>
-    <PulseFlowFactor>1.4</PulseFlowFactor>
-    <LimbSpeedFlowFactor>0.1</LimbSpeedFlowFactor>
-    <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
-    <RandomPosFactor>10</RandomPosFactor>
-  </BleedingConfig>
 </Config>
