@@ -90,7 +90,7 @@ namespace MoreBlood
     /// </summary>
     public static void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (Debug == true)
+      if (Debug.PluginDebug)
       {
         var fi = new FileInfo(source);
 

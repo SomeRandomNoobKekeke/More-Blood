@@ -13,14 +13,13 @@ namespace MoreBlood
 {
   public class AdvancedDecal
   {
-    public static bool DecalDebug { get; set; } = false;
     public static HashSet<AdvancedDecal> Decals = new();
     private static double lastNotifyTiming;
     public static void UpdateAll()
     {
       foreach (AdvancedDecal decal in Decals) decal.Update();
 
-      if (DecalDebug && Timing.TotalTimeUnpaused - lastNotifyTiming > 0.1)
+      if (Mod.Debug.ConsoleDebug && Timing.TotalTimeUnpaused - lastNotifyTiming > 0.1)
       {
         lastNotifyTiming = Timing.TotalTimeUnpaused;
         Mod.Log($"Blood decals count:{Decals.Count}", Color.Pink);
@@ -54,7 +53,7 @@ namespace MoreBlood
 
         LifeTime = (float)Math.Clamp(l * MaxLifeTime, MinLifetime, MaxLifeTime);
 
-        if (DecalDebug)
+        if (Mod.Debug.ConsoleDebug)
         {
           Mod.Log($"new decal| input size:{Math.Round(value, 2)} -> SizeToLifetime:{Math.Round(l * MaxLifeTime, 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
         }
@@ -92,7 +91,7 @@ namespace MoreBlood
       {
         spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, Rotation, HalfSpriteSize, Size, SpriteEffects.None, depth);
 
-        if (DecalDebug)
+        if (Mod.Debug.VisualDebug)
         {
           GUI.DrawRectangle(spriteBatch, drawPos - new Vector2(64, 64) * Size, new Vector2(128, 128) * Size, Color.Yellow * 0.3f);
 

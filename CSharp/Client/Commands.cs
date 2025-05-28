@@ -30,13 +30,33 @@ namespace MoreBlood
       AddedCommands.Add(new DebugConsole.Command("spawnbloodpuddle", "spawnbloodpuddle [size]", SpawnBloodPuddle_Command));
 
 
-      AddedCommands.Add(new DebugConsole.Command("blooddecaldebug", "", BloodDecalDebug_Command));
+      AddedCommands.Add(new DebugConsole.Command("blooddebug", "", BloodDecalDebug_Command, () => new string[][] { typeof(BloodDebug).GetProperties().Select(pi => pi.Name).ToArray() }));
 
       DebugConsole.Commands.InsertRange(0, AddedCommands);
     }
     public static void BloodDecalDebug_Command(string[] args)
     {
-      AdvancedDecal.DecalDebug = !AdvancedDecal.DecalDebug;
+      if (args.Length == 0)
+      {
+        Debug.ConsoleDebug = !Debug.ConsoleDebug;
+        Debug.VisualDebug = !Debug.VisualDebug;
+        return;
+      }
+
+      if (string.Equals(args[0], "ConsoleDebug", StringComparison.OrdinalIgnoreCase))
+      {
+        Debug.ConsoleDebug = !Debug.ConsoleDebug;
+      }
+
+      if (string.Equals(args[0], "VisualDebug", StringComparison.OrdinalIgnoreCase))
+      {
+        Debug.VisualDebug = !Debug.VisualDebug;
+      }
+
+      if (string.Equals(args[0], "PluginDebug", StringComparison.OrdinalIgnoreCase))
+      {
+        Debug.PluginDebug = !Debug.PluginDebug;
+      }
     }
     public static void SpawnBlood_Command(string[] args)
     {

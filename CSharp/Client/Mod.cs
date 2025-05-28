@@ -30,8 +30,7 @@ namespace MoreBlood
     public static VanillaDecalKiller VanillaDecalKiller = new();
 
     public static Config Config = new Config();
-
-    public static bool Debug;
+    public static BloodDebug Debug = new BloodDebug();
 
     public void Initialize()
     {
@@ -44,8 +43,8 @@ namespace MoreBlood
 
       if (Package.Dir.Contains("LocalMods"))
       {
-        Debug = true;
-        Log($"Found [{Package.Name}] in LocalMods, debug: {Debug}\n");
+        Debug.PluginDebug = true;
+        Log($"Found [{Package.Name}] in LocalMods, debug: {Debug.PluginDebug}\n");
       }
 
       PatchAll();
@@ -81,6 +80,7 @@ namespace MoreBlood
       FromImpact.PatchAll(Harmony);
       TrackDamageSource.PatchAll(Harmony);
       HookSettingsMenu.PatchAll(Harmony);
+      DrawDecalCount.PatchAll(Harmony);
     }
 
 
