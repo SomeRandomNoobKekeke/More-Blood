@@ -6,10 +6,10 @@
     <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
     <PulseSteepness>8</PulseSteepness>
-    <MinFlow>0.3</MinFlow>
+    <MinFlow>0</MinFlow>
     <FlowCutoff>0</FlowCutoff>
-    <SeverityFlowFactor>0.1</SeverityFlowFactor>
-    <PulseFlowFactor>0.5</PulseFlowFactor>
+    <SeverityFlowFactor>0.2</SeverityFlowFactor>
+    <PulseFlowFactor>0</PulseFlowFactor>
     <LimbSpeedFlowFactor>0.01</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>

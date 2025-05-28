@@ -41,15 +41,11 @@ namespace MoreBlood
       get => size;
       set
       {
-        size = Math.Clamp(value, MinSize, MaxSize);
+        float s = value * Utils.RandomMult(RandomSizeDecrement, RandomSizeIncrement);
 
-        double l = (
-          value * SizeToLifetime * (
-            1
-            + (RandomLifetimeDecrement + RandomLifetimeIncrement) * Mod.Random.NextSingle()
-            - RandomLifetimeDecrement
-          )
-        ) / MaxLifeTime;
+        size = Math.Clamp(s, MinSize, MaxSize);
+
+        double l = s * SizeToLifetime * Utils.RandomMult(RandomLifetimeDecrement, RandomLifetimeIncrement) / MaxLifeTime;
 
         l = Math.Pow(Math.Max(0, l), LifetimeExponent);
 
@@ -57,7 +53,7 @@ namespace MoreBlood
 
         if (Mod.Debug.ConsoleDebug)
         {
-          Mod.Log($"new decal| input size:{Math.Round(value, 2)} -> SizeToLifetime:{Math.Round(l * MaxLifeTime, 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
+          Mod.Log($"new decal| input size:{Math.Round(s, 2)} -> SizeToLifetime:{Math.Round(l * MaxLifeTime, 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
         }
       }
     }
@@ -67,8 +63,10 @@ namespace MoreBlood
     public float MinLifetime = 0.0f;
     public float SizeToLifetime = 0.1f;
     public float LifetimeExponent = 1.0f;
-    public float RandomLifetimeIncrement = 0.0f;
-    public float RandomLifetimeDecrement = 0.0f;
+    public float RandomLifetimeIncrement;
+    public float RandomLifetimeDecrement;
+    public float RandomSizeIncrement;
+    public float RandomSizeDecrement;
 
     public float Rotation;
     public Vector2 HullPosition;
@@ -119,7 +117,7 @@ namespace MoreBlood
     {
       Decals.Add(this);
       CreationTime = Timing.TotalTimeUnpaused;
-      Rotation = Mod.Random.NextSingle() * Mod.Pi2;
+      Rotation = Utils.Random.NextSingle() * Utils.Pi2;
 
       Prefab = prefab;
       Sprite = prefab.Sprites[Rand.Range(0, prefab.Sprites.Count)];
@@ -133,6 +131,8 @@ namespace MoreBlood
       LifetimeExponent = prefab.LifetimeExponent;
       RandomLifetimeIncrement = prefab.RandomLifetimeIncrement;
       RandomLifetimeDecrement = prefab.RandomLifetimeDecrement;
+      RandomSizeDecrement = prefab.RandomSizeDecrement;
+      RandomSizeIncrement = prefab.RandomSizeIncrement;
 
 
       HalfSpriteSize = new Vector2(

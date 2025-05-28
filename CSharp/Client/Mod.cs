@@ -22,11 +22,11 @@ namespace MoreBlood
     public static string PrefabsPath => Path.Combine(Package.Dir, AdvancedDecalPrefab.DefaultPrefabsPath);
 
 
-    public static float Pi2 = (float)(Math.PI * 2.0);
+
 
     public static Dictionary<Character, double> PulseOffsets = new();
     public static Harmony Harmony = new Harmony("more.blood");
-    public static Random Random = new Random();
+
     public static VanillaDecalKiller VanillaDecalKiller = new();
 
     public static Config Config = new Config();

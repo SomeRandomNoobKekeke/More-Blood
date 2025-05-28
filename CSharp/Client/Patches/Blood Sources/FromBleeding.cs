@@ -104,7 +104,7 @@ namespace MoreBlood
         Vector2 decalPos =
           targetLimb.WorldPosition +
           config.LimbSpeedPosFactor * limbSpeed +
-          config.RandomPosFactor * new Vector2(Mod.Random.NextSingle(), Mod.Random.NextSingle());
+          config.RandomPosFactor * new Vector2(Utils.Random.NextSingle(), Utils.Random.NextSingle());
 
         _.Character.CurrentHull?.AddDecal(
           AdvancedDecal.Create(_.Character.BloodDecalName, bloodDecalSize),

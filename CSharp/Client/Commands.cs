@@ -100,7 +100,7 @@ namespace MoreBlood
       {
         hull.AddDecal(
           AdvancedDecal.Create(AdvancedDecalPrefab.DefaultBasePrefab, 1f),
-          mousePos + new Vector2(Mod.Random.NextSingle(), Mod.Random.NextSingle()) * 10.0f
+          mousePos + new Vector2(Utils.Random.NextSingle(), Utils.Random.NextSingle()) * 10.0f
         );
       }
     }

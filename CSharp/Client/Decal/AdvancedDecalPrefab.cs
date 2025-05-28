@@ -110,6 +110,8 @@ namespace MoreBlood
     public float MinSize { get; set; } = 0.1f;
     public float RandomLifetimeIncrement { get; set; } = 0.0f;
     public float RandomLifetimeDecrement { get; set; } = 0.0f;
+    public float RandomSizeIncrement { get; set; } = 0.0f;
+    public float RandomSizeDecrement { get; set; } = 0.0f;
 
     public float SizeToLifetime { get; set; } = 0.1f;
     public float LifetimeExponent { get; set; } = 1.0f;

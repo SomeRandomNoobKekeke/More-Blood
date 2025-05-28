@@ -54,7 +54,7 @@ namespace MoreBlood
       Vector2 direction = context.Item.body.LinearVelocity / context.Item.body.LinearVelocity.Length();
       Vector2 offset =
         direction * Mod.Config.FromImpact.OfProjectile.MinBloodFlyDistance +
-        direction * Mod.Config.FromImpact.OfProjectile.BloodSpeed * Mod.Random.NextSingle();
+        direction * Mod.Config.FromImpact.OfProjectile.BloodSpeed * Utils.Random.NextSingle();
 
       AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
     }
@@ -65,7 +65,7 @@ namespace MoreBlood
 
       Vector2 offset =
         direction * Mod.Config.FromImpact.OfMeleeWeapon.MinBloodFlyDistance +
-        direction * Mod.Config.FromImpact.OfMeleeWeapon.BloodSpeed * Mod.Random.NextSingle();
+        direction * Mod.Config.FromImpact.OfMeleeWeapon.BloodSpeed * Utils.Random.NextSingle();
 
       AddDecal(_, bleedingDamage, offset + _.character.AnimController.Collider.LinearVelocity);
     }
