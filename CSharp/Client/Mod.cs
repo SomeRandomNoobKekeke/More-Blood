@@ -81,7 +81,7 @@ namespace MoreBlood
       FromImpact.PatchAll(Harmony);
       TrackDamageSource.PatchAll(Harmony);
       HookSettingsMenu.PatchAll(Harmony);
-      DrawBloodInASeparateLayer.PatchAll(Harmony);
+      GameScreenPatch.PatchAll(Harmony);
     }
 
 
