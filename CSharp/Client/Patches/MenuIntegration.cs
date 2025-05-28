@@ -2,17 +2,28 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
 
 using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using System.IO;
+using Barotrauma.Items.Components;
+using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
+using FarseerPhysics.Dynamics.Joints;
 
 namespace MoreBlood
 {
   public static class MenuIntegration
   {
+    public static void PatchAll(Harmony harmony)
+    {
+      harmony.Patch(
+        original: typeof(SettingsMenu).GetConstructors(AccessTools.all)[0],
+        postfix: new HarmonyMethod(typeof(MenuIntegration).GetMethod("AfterMenuCreation"))
+      );
+    }
+
     public static void PrintComponentsReq(GUIComponent component, string offset = "")
     {
       Mod.Log($"{offset}{component} {component.Rect}");
