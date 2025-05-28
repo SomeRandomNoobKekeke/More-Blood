@@ -23,7 +23,7 @@ namespace MoreBlood
       AddedCommands.Add(new DebugConsole.Command("reloadbloodprefabs", "", ReloadBloodPrefabs_Command));
       AddedCommands.Add(new DebugConsole.Command("printbloodprefabs", "", PrintBloodPrefabs_Command));
       AddedCommands.Add(new DebugConsole.Command("printbloodconfig", "", PrintBloodConfig_Command));
-      AddedCommands.Add(new DebugConsole.Command("bleed", "", Bleed_Command));
+      AddedCommands.Add(new DebugConsole.Command("bleed", "bleed [amount] [limbcount]", Bleed_Command));
       AddedCommands.Add(new DebugConsole.Command("clearblood", "", ClearBlood_Command));
       AddedCommands.Add(new DebugConsole.Command("spawnblood", "spawnblood [size]", SpawnBlood_Command));
       AddedCommands.Add(new DebugConsole.Command("spawnbloodspectrum", "spawnbloodspectrum [offset]", SpawnBloodSpectrum_Command));
@@ -138,6 +138,7 @@ namespace MoreBlood
 
     public static void ReloadBlood_Command(string[] args)
     {
+      ClearBlood_Command(null);
       ReloadBloodConfig_Command(null);
       ReloadBloodPrefabs_Command(null);
     }
@@ -170,9 +171,11 @@ namespace MoreBlood
     public static void ClearBlood_Command(string[] args)
     {
       Mixins.Clear();
+      AdvancedDecal.Decals.Clear();
     }
 
     public static float? MemorizedBleedingAmount;
+    public static int? MemorizedLimbCount;
     public static void Bleed_Command(string[] args)
     {
       if (Character.Controlled is null) return;
@@ -186,11 +189,37 @@ namespace MoreBlood
         MemorizedBleedingAmount = bleedingAmount;
       }
 
+      Dictionary<int, string> limbNames = new()
+      {
+        [0] = "righthand",
+        [1] = "lefthand",
+        [2] = "rightleg",
+        [3] = "leftleg",
+        [4] = "head",
+        [5] = "torso",
+      };
+
+      int limbCount = MemorizedLimbCount ?? 1;
+      if (args.Length > 1)
+      {
+        int.TryParse(args[1], out limbCount);
+        MemorizedLimbCount = limbCount;
+      }
+      limbCount = Math.Clamp(limbCount, 0, 5);
+
+      List<Limb> targetLimbs = new List<Limb>();
+
+      for (int i = 0; i < limbCount; i++)
+      {
+        targetLimbs.Add(Character.Controlled.AnimController.Limbs.FirstOrDefault(l => l.type.ToString().Equals(limbNames[i], StringComparison.OrdinalIgnoreCase)));
+      }
+
       AfflictionPrefab afflictionPrefab = AfflictionPrefab.Bleeding;
 
-      Limb targetLimb = Character.Controlled.AnimController.Limbs.FirstOrDefault(l => l.type.ToString().Equals("righthand", StringComparison.OrdinalIgnoreCase));
-
-      Character.Controlled.CharacterHealth.ApplyAffliction(targetLimb ?? Character.Controlled.AnimController.MainLimb, afflictionPrefab.Instantiate(bleedingAmount));
+      foreach (Limb limb in targetLimbs)
+      {
+        Character.Controlled.CharacterHealth.ApplyAffliction(limb ?? Character.Controlled.AnimController.MainLimb, afflictionPrefab.Instantiate(bleedingAmount));
+      }
     }
 
     public static void RemoveCommands()

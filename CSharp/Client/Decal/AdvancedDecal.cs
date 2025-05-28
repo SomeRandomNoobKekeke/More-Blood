@@ -15,6 +15,7 @@ namespace MoreBlood
   {
     public static HashSet<AdvancedDecal> Decals = new();
     private static double lastNotifyTiming;
+    public static int cachedCount;
     public static void UpdateAll()
     {
       foreach (AdvancedDecal decal in Decals) decal.Update();
@@ -22,6 +23,7 @@ namespace MoreBlood
       if (Mod.Debug.ConsoleDebug && Timing.TotalTimeUnpaused - lastNotifyTiming > 0.1)
       {
         lastNotifyTiming = Timing.TotalTimeUnpaused;
+        cachedCount = Decals.Count;
         Mod.Log($"Blood decals count:{Decals.Count}", Color.Pink);
       }
     }
@@ -44,8 +46,8 @@ namespace MoreBlood
         double l = (
           value * SizeToLifetime * (
             1
-            + RandomLifetimeIncrement * Mod.Random.NextSingle()
-            - RandomLifetimeDecrement * Mod.Random.NextSingle()
+            + (RandomLifetimeDecrement + RandomLifetimeIncrement) * Mod.Random.NextSingle()
+            - RandomLifetimeDecrement
           )
         ) / MaxLifeTime;
 

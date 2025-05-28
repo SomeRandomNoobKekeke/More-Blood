@@ -21,11 +21,12 @@ namespace MoreBlood
       );
     }
 
+
     public static void GUI_Draw_Postfix(Camera cam, SpriteBatch spriteBatch)
     {
       if (Mod.Debug.ConsoleDebug || Mod.Debug.VisualDebug)
       {
-        GUI.DrawString(spriteBatch, new Vector2(GameMain.GraphicsWidth / 2.0f - 70.0f, 0), $"Blood decals count:{AdvancedDecal.Decals.Count}", Color.Pink);
+        GUI.DrawString(spriteBatch, new Vector2(GameMain.GraphicsWidth / 2.0f - 70.0f, 0), $"Blood decals count:{AdvancedDecal.cachedCount}", Color.Pink);
       }
     }
   }
