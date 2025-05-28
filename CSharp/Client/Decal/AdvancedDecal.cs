@@ -15,10 +15,16 @@ namespace MoreBlood
   {
     public static bool DecalDebug { get; set; } = false;
     public static HashSet<AdvancedDecal> Decals = new();
+    private static double lastNotifyTiming;
     public static void UpdateAll()
     {
-      //Mod.Log($"Decal count:{Decals.Count}");
       foreach (AdvancedDecal decal in Decals) decal.Update();
+
+      if (DecalDebug && Timing.TotalTimeUnpaused - lastNotifyTiming > 0.1)
+      {
+        lastNotifyTiming = Timing.TotalTimeUnpaused;
+        Mod.Log($"Blood decals count:{Decals.Count}", Color.Pink);
+      }
     }
     public AdvancedDecalPrefab Prefab;
     public Sprite Sprite;
@@ -79,18 +85,12 @@ namespace MoreBlood
       HullPosition = worldPosition - hull.WorldRect.Location.ToVector2();
     }
 
+    private Vector2 drawPos;
     public void Draw(SpriteBatch spriteBatch, float depth)
     {
       try
       {
-        //if (Sprite.Texture is null) return;
-
-        Vector2 drawPos = HullPosition + Hull.Rect.Location.ToVector2();
-        if (Hull.Submarine != null) { drawPos += Hull.Submarine.DrawPosition; }
-        drawPos.Y = -drawPos.Y;
-
         spriteBatch.Draw(Sprite.Texture, drawPos, Sprite.SourceRect, CurrentColor, Rotation, HalfSpriteSize, Size, SpriteEffects.None, depth);
-
 
         if (DecalDebug)
         {
@@ -105,6 +105,10 @@ namespace MoreBlood
 
     public void Update()
     {
+      drawPos = HullPosition + Hull.Rect.Location.ToVector2();
+      if (Hull.Submarine != null) { drawPos += Hull.Submarine.DrawPosition; }
+      drawPos.Y = -drawPos.Y;
+
       double lambda = (Timing.TotalTimeUnpaused - CreationTime) / LifeTime;
       if (lambda > 1) Remove();
       CurrentColor = ColorPoint.Lerp(Prefab.Colors, lambda);

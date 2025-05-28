@@ -26,7 +26,10 @@ namespace MoreBlood
       AddedCommands.Add(new DebugConsole.Command("bleed", "", Bleed_Command));
       AddedCommands.Add(new DebugConsole.Command("clearblood", "", ClearBlood_Command));
       AddedCommands.Add(new DebugConsole.Command("spawnblood", "spawnblood [size]", SpawnBlood_Command));
-      AddedCommands.Add(new DebugConsole.Command("spawnbloodspectrum", "", SpawnBloodSpectrum_Command));
+      AddedCommands.Add(new DebugConsole.Command("spawnbloodspectrum", "spawnbloodspectrum [offset]", SpawnBloodSpectrum_Command));
+      AddedCommands.Add(new DebugConsole.Command("spawnbloodpuddle", "spawnbloodpuddle [size]", SpawnBloodPuddle_Command));
+
+
       AddedCommands.Add(new DebugConsole.Command("blooddecaldebug", "", BloodDecalDebug_Command));
 
       DebugConsole.Commands.InsertRange(0, AddedCommands);
@@ -54,6 +57,32 @@ namespace MoreBlood
         AdvancedDecal.Create(AdvancedDecalPrefab.DefaultBasePrefab, size),
         mousePos
       );
+    }
+
+    public static void SpawnBloodPuddle_Command(string[] args)
+    {
+      ClearBlood_Command(null);
+
+      Vector2 mousePos = Screen.Selected.Cam.ScreenToWorld(PlayerInput.MousePosition);
+
+      Hull hull = Hull.GetCleanTarget(mousePos);
+
+      if (hull is null)
+      {
+        Mod.Log($"You need a hull");
+        return;
+      }
+
+      int size = 2000;
+      if (args.Length > 0) int.TryParse(args[0], out size);
+
+      for (int x = 0; x < size; x++)
+      {
+        hull.AddDecal(
+          AdvancedDecal.Create(AdvancedDecalPrefab.DefaultBasePrefab, 1f),
+          mousePos + new Vector2(Mod.Random.NextSingle(), Mod.Random.NextSingle()) * 10.0f
+        );
+      }
     }
 
     public static void SpawnBloodSpectrum_Command(string[] args)

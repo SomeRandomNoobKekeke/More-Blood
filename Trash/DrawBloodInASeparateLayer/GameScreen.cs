@@ -25,7 +25,18 @@ namespace MoreBlood
         original: typeof(GameScreen).GetMethod("DrawMap", AccessTools.all),
         prefix: new HarmonyMethod(typeof(GameScreenPatch).GetMethod("GameScreen_DrawMap_Replace"))
       );
+    }
 
+    public static void DrawBlood(SpriteBatch spriteBatch, GameScreen _)
+    {
+      spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
+
+      foreach (Hull hull in Hull.HullList)
+      {
+        if (hull.DrawBelowWater) hull.DrawBlood(spriteBatch);
+      }
+
+      spriteBatch.End();
     }
 
 
@@ -156,6 +167,11 @@ namespace MoreBlood
 
       sw.Stop();
       GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", sw.ElapsedTicks);
+      sw.Restart();
+
+      DrawBlood(spriteBatch, _);
+      sw.Stop();
+      GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Blood", sw.ElapsedTicks);
       sw.Restart();
 
       spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);

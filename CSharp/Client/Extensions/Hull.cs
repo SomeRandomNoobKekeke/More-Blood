@@ -18,5 +18,10 @@ namespace MoreBlood
       decal.ConnectToHull(worldPosition, hull);
       return decal;
     }
+
+    public static void DrawBlood(this Hull hull, SpriteBatch spriteBatch)
+    {
+      Mixins.GetHullMixin(hull).DrawAdvancedDecals(spriteBatch);
+    }
   }
 }
