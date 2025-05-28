@@ -123,18 +123,18 @@ namespace MoreBlood
       Mixins.Clear();
     }
 
-    public static float? LastBleedingAmount;
+    public static float? MemorizedBleedingAmount;
     public static void Bleed_Command(string[] args)
     {
       if (Character.Controlled is null) return;
 
       DebugConsole.ExecuteCommand("revive");
 
-      float bleedingAmount = LastBleedingAmount ?? 100.0f;
+      float bleedingAmount = MemorizedBleedingAmount ?? 100.0f;
       if (args.Length > 0)
       {
         float.TryParse(args[0], out bleedingAmount);
-        LastBleedingAmount = bleedingAmount;
+        MemorizedBleedingAmount = bleedingAmount;
       }
 
       AfflictionPrefab afflictionPrefab = AfflictionPrefab.Bleeding;
