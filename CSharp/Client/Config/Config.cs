@@ -18,7 +18,7 @@ namespace MoreBlood
     public static string DebugConfigPath = "Debug Config.xml";
     public static string DefaultConfigPath = "Config.xml";
     public static string DefaultOldConfigPath = "Old Config.xml";
-    public BleedingConfig BleedingConfig { get; set; } = new BleedingConfig();
+    public BleedingConfig FromBleeding { get; set; } = new BleedingConfig();
     public FromImpactConfig FromImpact { get; set; } = new FromImpactConfig();
     public float DecalDrawDepth { get; set; } = 0.6f;
     public float DecalCreationInterval { get; set; } = 0.03f;

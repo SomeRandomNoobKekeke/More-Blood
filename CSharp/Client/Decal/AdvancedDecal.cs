@@ -27,6 +27,27 @@ namespace MoreBlood
         Mod.Log($"Blood decals count:{Decals.Count}", Color.Pink);
       }
     }
+
+
+    private float size; public float Size
+    {
+      get => size;
+      set
+      {
+        float s = value * Utils.RandomMult(Prefab.SizeFluctuation.X, Prefab.SizeFluctuation.Y);
+
+        size = Math.Clamp(s, Prefab.MinSpriteSize, Prefab.MaxSpriteSize);
+
+        LifeTime =
+          Utils.ExpSegment(Prefab.SLStart, Prefab.SLEnd, Prefab.LifetimeExponent, s) *
+          Utils.RandomMult(Prefab.LifetimeFluctuation.X, Prefab.LifetimeFluctuation.Y);
+
+        if (Mod.Debug.ConsoleDebug)
+        {
+          Mod.Log($"new decal| input:{Math.Round(value, 2)} -> size:{Math.Round(size, 2)} -> lambda:{Math.Round(Utils.Lambda(Prefab.SLStart.X, Prefab.SLEnd.X, s), 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
+        }
+      }
+    }
     public AdvancedDecalPrefab Prefab;
     public Sprite Sprite;
     public Hull Hull;
@@ -34,40 +55,6 @@ namespace MoreBlood
 
     public double CreationTime;
     public Color CurrentColor;
-    public float MaxSize;
-    public float MinSize;
-    private float size; public float Size
-    {
-      get => size;
-      set
-      {
-        float s = value * Utils.RandomMult(RandomSizeDecrement, RandomSizeIncrement);
-
-        size = Math.Clamp(s, MinSize, MaxSize);
-
-        double l = s * SizeToLifetime * Utils.RandomMult(RandomLifetimeDecrement, RandomLifetimeIncrement) / MaxLifeTime;
-
-        l = Math.Pow(Math.Max(0, l), LifetimeExponent);
-
-        LifeTime = (float)Math.Clamp(l * MaxLifeTime, MinLifetime, MaxLifeTime);
-
-        if (Mod.Debug.ConsoleDebug)
-        {
-          Mod.Log($"new decal| input size:{Math.Round(s, 2)} -> SizeToLifetime:{Math.Round(l * MaxLifeTime, 2)} -> lifetime:{Math.Round(LifeTime, 2)}");
-        }
-      }
-    }
-
-
-    public float MaxLifeTime = 10.0f;
-    public float MinLifetime = 0.0f;
-    public float SizeToLifetime = 0.1f;
-    public float LifetimeExponent = 1.0f;
-    public float RandomLifetimeIncrement;
-    public float RandomLifetimeDecrement;
-    public float RandomSizeIncrement;
-    public float RandomSizeDecrement;
-
     public float Rotation;
     public Vector2 HullPosition;
     public Vector2 WorldPosition
@@ -122,18 +109,7 @@ namespace MoreBlood
       Prefab = prefab;
       Sprite = prefab.Sprites[Rand.Range(0, prefab.Sprites.Count)];
       CurrentColor = prefab.Colors[0].Color;
-      LifeTime = prefab.MaxLifeTime;
-      MaxLifeTime = prefab.MaxLifeTime;
-      MinLifetime = Math.Min(prefab.MinLifetime, prefab.MaxLifeTime);
-      MinSize = prefab.MinSize;
-      MaxSize = prefab.MaxSize;
-      SizeToLifetime = prefab.SizeToLifetime;
-      LifetimeExponent = prefab.LifetimeExponent;
-      RandomLifetimeIncrement = prefab.RandomLifetimeIncrement;
-      RandomLifetimeDecrement = prefab.RandomLifetimeDecrement;
-      RandomSizeDecrement = prefab.RandomSizeDecrement;
-      RandomSizeIncrement = prefab.RandomSizeIncrement;
-
+      LifeTime = 1.0f;
 
       HalfSpriteSize = new Vector2(
         Sprite.SourceRect.Width / 2.0f,

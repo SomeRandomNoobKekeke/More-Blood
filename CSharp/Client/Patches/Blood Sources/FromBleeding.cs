@@ -66,7 +66,7 @@ namespace MoreBlood
     {
       if (_.Character.CurrentHull is not null)
       {
-        BleedingConfig config = Mod.Config.BleedingConfig;
+        BleedingConfig config = Mod.Config.FromBleeding;
 
         Vector2 limbSpeed = targetLimb.LinearVelocity - _.Character.AnimController.Collider.LinearVelocity;
 
@@ -88,7 +88,7 @@ namespace MoreBlood
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
         float bloodDecalSize =
-          Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding * (
+          Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding * (
             config.MinFlow +
             vitalityFactor * severityFactor * (
               config.SeverityFlowFactor +
@@ -99,7 +99,7 @@ namespace MoreBlood
 
         bloodDecalSize *= _.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f;
 
-        if (bloodDecalSize < config.FlowCutoff * Mod.Config.GlobalBloodAmount * Mod.Config.BleedingConfig.BloodAmountFromBleeding) return;
+        if (bloodDecalSize < config.FlowCutoff * Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding) return;
 
         Vector2 decalPos =
           targetLimb.WorldPosition +

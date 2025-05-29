@@ -18,17 +18,7 @@ namespace MoreBlood
   {
     public static string DefaultPrefabsPath = "Prefabs";
     public static string DefaultBasePrefab = "blood";
-    public static AdvancedDecalPrefab Backup = new AdvancedDecalPrefab()
-    {
-      BasedOn = "blood",
-      Colors = new List<ColorPoint>(){
-          new ColorPoint(new Color(102, 0, 0, 255), 0.0),
-          new ColorPoint(new Color(64, 0, 0, 255), 0.4),
-          new ColorPoint(new Color(32, 0, 0, 255), 0.8),
-          new ColorPoint(new Color(32, 0, 0, 0), 1.0),
-        },
-      MaxLifeTime = 60,
-    };
+    public static AdvancedDecalPrefab Backup => Prefabs[DefaultBasePrefab];
     public static Dictionary<string, AdvancedDecalPrefab> Prefabs = new();
 
     public static AdvancedDecalPrefab GetPrefab(string name)
@@ -36,6 +26,42 @@ namespace MoreBlood
       if (Prefabs.ContainsKey(name)) return Prefabs[name];
       return Backup;
     }
+
+
+
+    private string basedOn; public string BasedOn
+    {
+      get => basedOn;
+      set
+      {
+        basedOn = value;
+        if (DecalManager.Prefabs.ContainsKey(value))
+        {
+          Sprites = DecalManager.Prefabs[value].Sprites;
+        }
+        else
+        {
+          Mod.Warning($"Couldn't steal sprites from vanilla decal prefab [{value}], using default blood sprites");
+          Sprites = DecalManager.Prefabs[DefaultBasePrefab].Sprites;
+        }
+      }
+    }
+    public List<ColorPoint> Colors = new();
+    public List<Sprite> Sprites;
+
+    public Vector2 SizeFluctuation { get; set; }
+    public Vector2 LifetimeFluctuation { get; set; }
+
+    public float LifetimeExponent { get; set; } = 1.0f;
+    public float MinSpriteSize { get; set; } = 0.1f;
+    public float MaxSpriteSize { get; set; } = 1.8f;
+
+    public float MinSize { get; set; } = 0.0f;
+    public float MaxSize { get; set; } = 1.0f;
+    public float MinLifetime { get; set; } = 0.0f;
+    public float MaxLifetime { get; set; } = 20.0f;
+    public Vector2 SLStart;
+    public Vector2 SLEnd;
 
     public static void SavePrefabs(string path)
     {
@@ -84,45 +110,13 @@ namespace MoreBlood
       XDocument xdoc = XDocument.Load(path);
       return FromXML(xdoc.Root);
     }
-
-    private string basedOn; public string BasedOn
-    {
-      get => basedOn;
-      set
-      {
-        basedOn = value;
-        if (DecalManager.Prefabs.ContainsKey(value))
-        {
-          Sprites = DecalManager.Prefabs[value].Sprites;
-        }
-        else
-        {
-          Mod.Warning($"Couldn't steal sprites from vanilla decal prefab [{value}], using default blood sprites");
-          Sprites = DecalManager.Prefabs[DefaultBasePrefab].Sprites;
-        }
-      }
-    }
-    public List<ColorPoint> Colors = new();
-    public List<Sprite> Sprites;
-    public float MaxLifeTime { get; set; } = 10.0f;
-    public float MinLifetime { get; set; } = 2.0f;
-    public float MaxSize { get; set; } = 1.8f;
-    public float MinSize { get; set; } = 0.1f;
-    public float RandomLifetimeIncrement { get; set; } = 0.0f;
-    public float RandomLifetimeDecrement { get; set; } = 0.0f;
-    public float RandomSizeIncrement { get; set; } = 0.0f;
-    public float RandomSizeDecrement { get; set; } = 0.0f;
-
-    public float SizeToLifetime { get; set; } = 0.1f;
-    public float LifetimeExponent { get; set; } = 1.0f;
-
     public XElement ToXML()
     {
       XElement element = new XElement("AdvancedDecalPrefab");
 
       foreach (PropertyInfo pi in typeof(AdvancedDecalPrefab).GetProperties(BindingFlags.Instance | BindingFlags.Public))
       {
-        element.Add(new XAttribute(pi.Name, pi.GetValue(this)));
+        element.Add(new XAttribute(pi.Name, Parser.Serialize(pi.GetValue(this))));
       }
 
       foreach (ColorPoint cp in Colors)
@@ -135,25 +129,27 @@ namespace MoreBlood
 
 
 
-    public static AdvancedDecalPrefab FromXML(XElement element)
-    {
-      AdvancedDecalPrefab prefab = new AdvancedDecalPrefab();
+    public static AdvancedDecalPrefab FromXML(XElement element) => new AdvancedDecalPrefab(element);
 
+    public AdvancedDecalPrefab(XElement element)
+    {
       foreach (XAttribute attribute in element.Attributes())
       {
         PropertyInfo pi = typeof(AdvancedDecalPrefab).GetProperty(attribute.Name.ToString());
-        pi?.SetValue(prefab, Parser.Parse(attribute.Value, pi.PropertyType));
+        pi?.SetValue(this, Parser.Parse(attribute.Value, pi.PropertyType));
       }
 
-      prefab.BasedOn ??= DefaultBasePrefab;
+      this.BasedOn ??= DefaultBasePrefab;
 
       foreach (XElement cp in element.Elements("ColorPoint"))
       {
-        prefab.Colors.Add(ColorPoint.FromXML(cp));
+        this.Colors.Add(ColorPoint.FromXML(cp));
       }
 
-      return prefab;
+      SLStart = new Vector2(MinSize, MinLifetime);
+      SLEnd = new Vector2(MaxSize, MaxLifetime);
     }
+
 
     public static void PrintPrefabs()
     {

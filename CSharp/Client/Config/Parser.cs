@@ -70,10 +70,63 @@ namespace MoreBlood
 
       if (!T.IsPrimitive)
       {
-        throw new NotImplementedException("bruh");
+        MethodInfo parse = null;
+        if (ExtraParsingMethods.Parse.ContainsKey(T))
+        {
+          parse = ExtraParsingMethods.Parse[T];
+        }
+        else
+        {
+          parse = T.GetMethod(
+            "Parse",
+            BindingFlags.Public | BindingFlags.Static,
+            new Type[] { typeof(string) }
+          );
+        }
+
+        if (parse == null)
+        {
+          Mod.Warning($"Parser can't parse [{raw}] into [{T}] because it doesn't have the Parse method");
+          return DefaultFor(T);
+        }
+
+        try
+        {
+          return parse.Invoke(null, new object[] { raw });
+        }
+        catch (Exception e)
+        {
+          if (verbose)
+          {
+            Mod.Warning($"Parser failed to parse [{raw}] into [{T}]");
+          }
+          else throw e;
+
+          return DefaultFor(T);
+        }
       }
 
       return DefaultFor(T);
+    }
+
+    public static string Serialize(object o, bool verbose = true)
+    {
+      if (o.GetType() == typeof(string)) return (string)o;
+
+      MethodInfo customToString = ExtraParsingMethods.CustomToString.GetValueOrDefault(o.GetType());
+      string result = null;
+
+      try
+      {
+        result = customToString == null ? o.ToString() : (string)customToString.Invoke(null, new object[] { o });
+      }
+      catch (Exception e)
+      {
+        if (verbose) Mod.Warning($"Parser failed to serialize object of [{o.GetType()}] type");
+        else throw e;
+      }
+
+      return result;
     }
   }
 }

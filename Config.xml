@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Config>
-  <BleedingConfig>
+  <FromBleeding>
     <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
     <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
     <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
-    <PulseSteepness>8</PulseSteepness>
-    <MinFlow>0</MinFlow>
-    <FlowCutoff>0</FlowCutoff>
-    <SeverityFlowFactor>0.2</SeverityFlowFactor>
-    <PulseFlowFactor>0</PulseFlowFactor>
-    <LimbSpeedFlowFactor>0.01</LimbSpeedFlowFactor>
+    <PulseSteepness>32</PulseSteepness>
+    <MinFlow>0.1</MinFlow>
+    <FlowCutoff>0.3</FlowCutoff>
+    <SeverityFlowFactor>0.1</SeverityFlowFactor>
+    <PulseFlowFactor>0.6</PulseFlowFactor>
+    <LimbSpeedFlowFactor>0.04</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
-    <RandomPosFactor>10</RandomPosFactor>
-  </BleedingConfig>
+    <RandomPosFactor>30</RandomPosFactor>
+  </FromBleeding>
   <FromImpact>
     <OfProjectile>
       <MinBloodFlyDistance>40</MinBloodFlyDistance>
@@ -29,7 +29,7 @@
     <Cutoff>0</Cutoff>
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
-  <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>1</GlobalBloodAmount>
+  <DecalCreationInterval>0.06</DecalCreationInterval>
+  <GlobalBloodAmount>2</GlobalBloodAmount>
   <Version>1.1.0</Version>
 </Config>

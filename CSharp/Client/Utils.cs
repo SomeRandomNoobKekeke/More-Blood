@@ -17,5 +17,14 @@ namespace MoreBlood
     public static float Pi2 = (float)(Math.PI * 2.0);
     public static float RandomMult(float decrement, float increment)
       => 1 + (decrement + increment) * Random.NextSingle() - decrement;
+
+    public static float Lambda(float start, float end, float value) => (value - start) / (end - start);
+
+    public static float ExpSegment(Vector2 Start, Vector2 End, float Exponent, float x)
+    {
+      if (x < Start.X) return Start.Y;
+      if (x > End.X) return End.Y;
+      return (float)(Start.Y + Math.Pow((x - Start.X) / (End.X - Start.X), Exponent) * (End.Y - Start.Y));
+    }
   }
 }
