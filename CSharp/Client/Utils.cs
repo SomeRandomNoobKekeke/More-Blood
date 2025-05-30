@@ -13,6 +13,7 @@ namespace MoreBlood
 {
   public static class Utils
   {
+    public static float HumanVitality = 100.0f;
     public static Random Random = new Random();
     public static float Pi2 = (float)(Math.PI * 2.0);
     public static float Lambda(float start, float end, float value) => (value - start) / (end - start);

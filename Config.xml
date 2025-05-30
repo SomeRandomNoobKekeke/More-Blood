@@ -33,5 +33,6 @@
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <GlobalBloodAmount>1</GlobalBloodAmount>
+  <VitalityMultiplier>0.9</VitalityMultiplier>
   <Version>1.1.0</Version>
 </Config>

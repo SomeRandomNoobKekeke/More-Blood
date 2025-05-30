@@ -33,7 +33,8 @@ namespace MoreBlood
     {
       Vector2 realOffset = offset ?? Vector2.Zero;
 
-      float vitalityFactor = _.character.Params.Health.Vitality / 100.0f;
+      float vitalityFactor = 1 + (_.character.Params.Health.Vitality - Utils.HumanVitality) / Utils.HumanVitality * Mod.Config.VitalityMultiplier;
+
 
       float bloodDecalSize =
         Mod.Config.FromImpact.BloodAmountFromImpact * Mod.Config.GlobalBloodAmount * (
@@ -77,6 +78,8 @@ namespace MoreBlood
     {
       if (__result.Afflictions is null) return;
       Limb _ = __instance;
+
+      if (_.character.GodMode) return;
 
       float bleedingDamage = 0;
       try

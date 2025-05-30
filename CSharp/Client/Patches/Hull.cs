@@ -16,10 +16,10 @@ namespace MoreBlood
     public static Stopwatch sw = new Stopwatch();
     public static void PatchAll(Harmony harmony)
     {
-      harmony.Patch(
-        original: typeof(Hull).GetMethod("DrawDecals", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_DrawDecals_Prefix"))
-      );
+      // harmony.Patch(
+      //   original: typeof(Hull).GetMethod("DrawDecals", AccessTools.all),
+      //   prefix: new HarmonyMethod(typeof(HullPatches).GetMethod("Hull_DrawDecals_Prefix"))
+      // );
 
       harmony.Patch(
         original: typeof(Hull).GetMethod("DrawDecals", AccessTools.all),
@@ -45,8 +45,11 @@ namespace MoreBlood
     public static void Hull_DrawDecals_Postfix(Hull __instance, SpriteBatch spriteBatch)
     {
       Mixins.GetHullMixin(__instance).DrawAdvancedDecals(spriteBatch);
-      sw.Stop();
-      GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Decals", sw.ElapsedTicks);
+
+      // No point in this, the main lags are coming from sprite sorting in BackCharactersItems
+      // sw.Stop();
+      // GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Decals", sw.ElapsedTicks);
+      // It doesn't add negative ticks nicely
       //GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", -sw.ElapsedTicks);
     }
 

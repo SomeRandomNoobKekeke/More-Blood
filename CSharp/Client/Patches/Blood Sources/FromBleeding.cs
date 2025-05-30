@@ -70,7 +70,7 @@ namespace MoreBlood
 
         Vector2 limbSpeed = targetLimb.LinearVelocity - _.Character.AnimController.Collider.LinearVelocity;
 
-        float vitalityFactor = _.Character.Params.Health.Vitality / 100.0f;
+        float vitalityFactor = 1 + (_.Character.Params.Health.Vitality - Utils.HumanVitality) / Utils.HumanVitality * Mod.Config.VitalityMultiplier;
 
         float pulseSpeed =
           config.BasicPulseSpeed *

@@ -49,17 +49,17 @@ namespace MoreBlood
     public List<ColorPoint> Colors = new();
     public List<Sprite> Sprites;
 
-    public Fluctuation SizeFluctuation { get; set; } = Fluctuation.One;
-    public Fluctuation LifetimeFluctuation { get; set; } = Fluctuation.One;
+    public Fluctuation SizeFluctuation { get; set; } = new Fluctuation(0.7f, 1.3f, 1.0f);
+    public Fluctuation LifetimeFluctuation { get; set; } = new Fluctuation(1.0f, 4.0f, 4.0f);
 
-    public float LifetimeExponent { get; set; } = 1.0f;
-    public float MinSpriteSize { get; set; } = 0.1f;
+    public float LifetimeExponent { get; set; } = 2.0f;
+    public float MinSpriteSize { get; set; } = 0.3f;
     public float MaxSpriteSize { get; set; } = 1.8f;
 
     public float MinSize { get; set; } = 0.0f;
-    public float MaxSize { get; set; } = 1.0f;
-    public float MinLifetime { get; set; } = 0.0f;
-    public float MaxLifetime { get; set; } = 20.0f;
+    public float MaxSize { get; set; } = 3.0f;
+    public float MinLifetime { get; set; } = 2.0f;
+    public float MaxLifetime { get; set; } = 30.0f;
 
 
     public Vector2 SLStart;

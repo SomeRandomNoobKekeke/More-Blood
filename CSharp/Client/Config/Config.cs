@@ -23,6 +23,7 @@ namespace MoreBlood
     public float DecalDrawDepth { get; set; } = 0.6f;
 
     public float GlobalBloodAmount { get; set; } = 1.0f;
+    public float VitalityMultiplier { get; set; } = 0.9f;
     public string Version { get; set; } = "0.0.0";
   }
 

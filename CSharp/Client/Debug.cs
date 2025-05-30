@@ -13,7 +13,7 @@ namespace MoreBlood
 {
   public class BloodDebug
   {
-    public bool ConsoleDebug { get; set; } = true;
+    public bool ConsoleDebug { get; set; } = false;
     public bool VisualDebug { get; set; } = false;
     public bool PluginDebug { get; set; } = false;
   }
