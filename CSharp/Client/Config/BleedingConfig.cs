@@ -16,6 +16,7 @@ namespace MoreBlood
   public class BleedingConfig : ConfigBase
   {
     public float BloodAmountFromBleeding { get; set; } = 1.0f;
+    public float LifetimeMultiplier { get; set; } = 1.0f;
     public float UnconciousPulseSpeed { get; set; } = 0.3f;
     public float UnconciousBloodFlow { get; set; } = 0.5f;
     public float BasicPulseSpeed { get; set; } = 7.0f;
@@ -27,7 +28,5 @@ namespace MoreBlood
     public float LimbSpeedFlowFactor { get; set; } = 0.06f;
     public float LimbSpeedPosFactor { get; set; } = 10.0f;
     public float RandomPosFactor { get; set; } = 10.0f;
-    public float LifetimeMultiplier { get; set; } = 1.0f;
-
   }
 }

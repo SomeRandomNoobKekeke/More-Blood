@@ -16,6 +16,7 @@ namespace MoreBlood
   public class FromImpactConfig : ConfigBase
   {
     public float BloodAmountFromImpact { get; set; } = 1.0f;
+    public float LifetimeMultiplier { get; set; } = 1.0f;
     public float BleedingDamageToDecalSize { get; set; } = 0.18f;
     public float MinSplash { get; set; } = 1f;
     public float Cutoff { get; set; } = 0f;

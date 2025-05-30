@@ -39,8 +39,11 @@ namespace MoreBlood
         size = Math.Clamp(s, Prefab.MinSpriteSize, Prefab.MaxSpriteSize);
 
         LifeTime =
-          Utils.ExpSegment(Prefab.SLStart, Prefab.SLEnd, Prefab.LifetimeExponent, s) *
-          Utils.RandomMult(Prefab.LifetimeFluctuation.X, Prefab.LifetimeFluctuation.Y);
+          Math.Clamp(
+            Utils.ExpSegment(Prefab.SLStart, Prefab.SLEnd, Prefab.LifetimeExponent, s) *
+            Utils.RandomMult(Prefab.LifetimeFluctuation.X, Prefab.LifetimeFluctuation.Y),
+            Prefab.MinLifetime, Prefab.MaxLifetime
+          );
 
         if (Mod.Debug.ConsoleDebug)
         {

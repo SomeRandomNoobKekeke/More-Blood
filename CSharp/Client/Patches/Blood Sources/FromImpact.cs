@@ -41,12 +41,14 @@ namespace MoreBlood
           bleedingDamage * Mod.Config.FromImpact.BleedingDamageToDecalSize * vitalityFactor
         );
 
-      if (bloodDecalSize < Mod.Config.FromImpact.Cutoff * Mod.Config.FromImpact.BloodAmountFromImpact * Mod.Config.GlobalBloodAmount) return;
+      if (bloodDecalSize < Mod.Config.FromImpact.Cutoff) return;
 
-      _.character.CurrentHull.AddDecal(
+      AdvancedDecal decal = _.character.CurrentHull.AddDecal(
         AdvancedDecal.Create(_.character.BloodDecalName, bloodDecalSize),
         _.WorldPosition + realOffset
       );
+
+      decal.LifeTime *= Mod.Config.FromImpact.LifetimeMultiplier;
     }
 
     public static void AddDecalFromProjectile(Limb _, float bleedingDamage, ProjectileDamageContext context)

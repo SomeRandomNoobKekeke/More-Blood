@@ -99,17 +99,19 @@ namespace MoreBlood
 
         bloodDecalSize *= _.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f;
 
-        if (bloodDecalSize < config.FlowCutoff * Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding) return;
+        if (bloodDecalSize < config.FlowCutoff) return;
 
         Vector2 decalPos =
           targetLimb.WorldPosition +
           config.LimbSpeedPosFactor * limbSpeed +
           config.RandomPosFactor * new Vector2(Utils.Random.NextSingle(), Utils.Random.NextSingle());
 
-        _.Character.CurrentHull?.AddDecal(
+        AdvancedDecal decal = _.Character.CurrentHull?.AddDecal(
           AdvancedDecal.Create(_.Character.BloodDecalName, bloodDecalSize),
           decalPos
         );
+
+        decal.LifeTime *= config.LifetimeMultiplier;
       }
     }
 
