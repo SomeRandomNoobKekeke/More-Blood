@@ -10,10 +10,6 @@ using Microsoft.Xna.Framework;
 
 namespace MoreBlood
 {
-
-
-
-
   public class FromBleeding
   {
     public static void PatchAll(Harmony harmony)
@@ -59,8 +55,6 @@ namespace MoreBlood
         Mod.PulseOffsets[_.Character] = Rand.Range(0.0f, 1.0f);
       }
     }
-
-
 
     public static void AddBleedingDecal(CharacterHealth _, AfflictionBleeding affliction, Limb targetLimb, float deltaTime)
     {
