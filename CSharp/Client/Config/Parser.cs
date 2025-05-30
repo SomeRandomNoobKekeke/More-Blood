@@ -111,7 +111,9 @@ namespace MoreBlood
 
     public static string Serialize(object o, bool verbose = true)
     {
+      if (o is null) return "";
       if (o.GetType() == typeof(string)) return (string)o;
+
 
       MethodInfo customToString = ExtraParsingMethods.CustomToString.GetValueOrDefault(o.GetType());
       string result = null;

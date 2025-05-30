@@ -34,14 +34,14 @@ namespace MoreBlood
       get => size;
       set
       {
-        float s = value * Utils.RandomMult(Prefab.SizeFluctuation.X, Prefab.SizeFluctuation.Y);
+        float s = value * Prefab.SizeFluctuation.Next();
 
         size = Math.Clamp(s, Prefab.MinSpriteSize, Prefab.MaxSpriteSize);
 
         LifeTime =
           Math.Clamp(
             Utils.ExpSegment(Prefab.SLStart, Prefab.SLEnd, Prefab.LifetimeExponent, s) *
-            Utils.RandomMult(Prefab.LifetimeFluctuation.X, Prefab.LifetimeFluctuation.Y),
+            Prefab.LifetimeFluctuation.Next(),
             Prefab.MinLifetime, Prefab.MaxLifetime
           );
 

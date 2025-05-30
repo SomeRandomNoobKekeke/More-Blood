@@ -15,11 +15,15 @@ namespace MoreBlood
   {
     public static Random Random = new Random();
     public static float Pi2 = (float)(Math.PI * 2.0);
-    public static float RandomMult(float decrement, float increment)
-      => 1 + (decrement + increment) * Random.NextSingle() - decrement;
-
     public static float Lambda(float start, float end, float value) => (value - start) / (end - start);
 
+    //HACK it's also in fluctuation, should i keep it?
+    public static float ExpRandom(float Start, float End, float Exponent)
+    {
+      double rand = Utils.Random.NextDouble();
+      rand = Math.Pow(rand, Exponent);
+      return (float)(Start + rand * (End - Start));
+    }
     public static float ExpSegment(Vector2 Start, Vector2 End, float Exponent, float x)
     {
       if (x < Start.X) return Start.Y;

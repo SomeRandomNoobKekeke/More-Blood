@@ -49,8 +49,8 @@ namespace MoreBlood
     public List<ColorPoint> Colors = new();
     public List<Sprite> Sprites;
 
-    public Vector2 SizeFluctuation { get; set; }
-    public Vector2 LifetimeFluctuation { get; set; }
+    public Fluctuation SizeFluctuation { get; set; } = Fluctuation.One;
+    public Fluctuation LifetimeFluctuation { get; set; } = Fluctuation.One;
 
     public float LifetimeExponent { get; set; } = 1.0f;
     public float MinSpriteSize { get; set; } = 0.1f;
@@ -60,6 +60,8 @@ namespace MoreBlood
     public float MaxSize { get; set; } = 1.0f;
     public float MinLifetime { get; set; } = 0.0f;
     public float MaxLifetime { get; set; } = 20.0f;
+
+
     public Vector2 SLStart;
     public Vector2 SLEnd;
 
