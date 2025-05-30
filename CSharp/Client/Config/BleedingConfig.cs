@@ -28,5 +28,6 @@ namespace MoreBlood
     public float LimbSpeedFlowFactor { get; set; } = 0.06f;
     public float LimbSpeedPosFactor { get; set; } = 10.0f;
     public float RandomPosFactor { get; set; } = 10.0f;
+    public float DecalCreationInterval { get; set; } = 0.03f;
   }
 }

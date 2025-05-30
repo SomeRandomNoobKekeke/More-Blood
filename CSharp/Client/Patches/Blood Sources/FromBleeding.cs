@@ -38,7 +38,7 @@ namespace MoreBlood
     public static bool ShouldCreate;
     public static void Character_UpdateAll_Postfix(float deltaTime, Camera cam)
     {
-      if (Timing.TotalTimeUnpaused - LastDecalCreationTime > Mod.Config.DecalCreationInterval)
+      if (Timing.TotalTimeUnpaused - LastDecalCreationTime > Mod.Config.FromBleeding.DecalCreationInterval)
       {
         LastDecalCreationTime = Timing.TotalTimeUnpaused;
         ShouldCreate = false;
@@ -88,8 +88,9 @@ namespace MoreBlood
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
         float bloodDecalSize =
-          Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding * (
+           (
             config.MinFlow +
+            Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding *
             vitalityFactor * severityFactor * (
               config.SeverityFlowFactor +
               config.PulseFlowFactor * pulseFactor +

@@ -6,14 +6,15 @@
     <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
     <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
-    <PulseSteepness>16</PulseSteepness>
-    <MinFlow>0.2</MinFlow>
-    <FlowCutoff>0.3</FlowCutoff>
-    <SeverityFlowFactor>0.16</SeverityFlowFactor>
+    <PulseSteepness>8</PulseSteepness>
+    <MinFlow>0.22</MinFlow>
+    <FlowCutoff>0.28</FlowCutoff>
+    <SeverityFlowFactor>0.06</SeverityFlowFactor>
     <PulseFlowFactor>0.6</PulseFlowFactor>
-    <LimbSpeedFlowFactor>0.03</LimbSpeedFlowFactor>
+    <LimbSpeedFlowFactor>0.01</LimbSpeedFlowFactor>
     <LimbSpeedPosFactor>10</LimbSpeedPosFactor>
     <RandomPosFactor>10</RandomPosFactor>
+    <DecalCreationInterval>0.03</DecalCreationInterval>
   </FromBleeding>
   <FromImpact>
     <OfProjectile>
@@ -31,7 +32,6 @@
     <Cutoff>0.2</Cutoff>
   </FromImpact>
   <DecalDrawDepth>0.6</DecalDrawDepth>
-  <DecalCreationInterval>0.03</DecalCreationInterval>
-  <GlobalBloodAmount>1.2</GlobalBloodAmount>
+  <GlobalBloodAmount>1</GlobalBloodAmount>
   <Version>1.1.0</Version>
 </Config>

@@ -21,7 +21,7 @@ namespace MoreBlood
     public BleedingConfig FromBleeding { get; set; } = new BleedingConfig();
     public FromImpactConfig FromImpact { get; set; } = new FromImpactConfig();
     public float DecalDrawDepth { get; set; } = 0.6f;
-    public float DecalCreationInterval { get; set; } = 0.03f;
+
     public float GlobalBloodAmount { get; set; } = 1.0f;
     public string Version { get; set; } = "0.0.0";
   }
