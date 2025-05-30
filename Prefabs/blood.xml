@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<AdvancedDecalPrefab BasedOn="blood" SizeFluctuation="[0,0.3]" LifetimeFluctuation="[0.3,0]" LifetimeExponent="2" MinSpriteSize="0.1" MaxSpriteSize="1.8" MinSize="0" MaxSize="1.5" MinLifetime="2" MaxLifetime="30">
+<AdvancedDecalPrefab BasedOn="blood" SizeFluctuation="[0,0.3]" LifetimeFluctuation="[1,1]" LifetimeExponent="2" MinSpriteSize="0.1" MaxSpriteSize="1.8" MinSize="0" MaxSize="1.7" MinLifetime="2" MaxLifetime="60">
   <ColorPoint Color="80,0,0,255" Lambda="0" />
   <ColorPoint Color="64,0,0,255" Lambda="0.3" />
   <ColorPoint Color="32,0,0,255" Lambda="0.8" />

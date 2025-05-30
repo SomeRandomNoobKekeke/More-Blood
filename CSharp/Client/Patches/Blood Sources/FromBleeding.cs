@@ -77,13 +77,14 @@ namespace MoreBlood
           (_.Character.IsUnconscious ? config.UnconciousPulseSpeed : 1.0f);
 
         float pulseFactor =
+          1.0f +
           (float)Math.Pow(
             Math.Sin(
               (Timing.TotalTime - Mod.PulseOffsets[_.Character]) *
               pulseSpeed
             ),
             config.PulseSteepness
-          );
+          ) * config.PulseFlowFactor;
 
         float severityFactor = (affliction.Strength / affliction.Prefab.MaxStrength);
 
@@ -93,9 +94,8 @@ namespace MoreBlood
             Mod.Config.GlobalBloodAmount * Mod.Config.FromBleeding.BloodAmountFromBleeding *
             vitalityFactor * severityFactor * (
               config.SeverityFlowFactor +
-              config.PulseFlowFactor * pulseFactor +
               config.LimbSpeedFlowFactor * limbSpeed.Length()
-            )
+            ) * pulseFactor
           );
 
         bloodDecalSize *= _.Character.IsUnconscious ? config.UnconciousBloodFlow : 1.0f;
