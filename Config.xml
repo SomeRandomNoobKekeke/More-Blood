@@ -27,7 +27,7 @@
     </OfMeleeWeapon>
     <BloodAmountFromImpact>1</BloodAmountFromImpact>
     <LifetimeMultiplier>2</LifetimeMultiplier>
-    <BleedingDamageToDecalSize>1.5</BleedingDamageToDecalSize>
+    <BleedingDamageToDecalSize>1.3</BleedingDamageToDecalSize>
     <MinSplash>0.1</MinSplash>
     <Cutoff>0.2</Cutoff>
   </FromImpact>

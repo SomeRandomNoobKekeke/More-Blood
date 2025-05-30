@@ -21,12 +21,16 @@ namespace MoreBlood
       );
     }
 
+    public static float TooMany = 1000.0f;
+
 
     public static void GUI_Draw_Postfix(Camera cam, SpriteBatch spriteBatch)
     {
       if (Mod.Debug.ConsoleDebug || Mod.Debug.VisualDebug)
       {
-        Color cl = Mod.Config.GlobalBloodAmount == 1 ? Color.Lime : Color.Pink;
+        Color cl = Mod.Config.GlobalBloodAmount == 1 ?
+          ToolBox.GradientLerp(AdvancedDecal.cachedCount / TooMany, Color.Lime, Color.Yellow, Color.Orange, Color.Red) :
+          Color.LightSlateGray;
         GUI.DrawString(spriteBatch, new Vector2(GameMain.GraphicsWidth / 2.0f - 70.0f, 0), $"Blood decals count:{AdvancedDecal.cachedCount}", cl);
       }
     }
