@@ -41,9 +41,11 @@ namespace MoreBlood
         LifeTime =
           Math.Clamp(
             Utils.ExpSegment(Prefab.SLStart, Prefab.SLEnd, Prefab.LifetimeExponent, s) *
-            Prefab.LifetimeFluctuation.Next(),
+            Prefab.LifetimeFluctuation.Next() * Mod.Config.GlobalDecalLifetime,
             Prefab.MinLifetime, Prefab.MaxLifetime
           );
+
+
 
         if (Mod.Debug.ConsoleDebug)
         {

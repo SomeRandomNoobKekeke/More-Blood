@@ -50,9 +50,16 @@ namespace MoreBlood
             return Math.Round(v, 2).ToString();
           },
           Mod.Config.GlobalBloodAmount,
-          v => { Mod.Config.GlobalBloodAmount = v; ConfigManager.Save(); }
+          v => { Mod.Config.GlobalBloodAmount = (float)Math.Round(v, 2); ConfigManager.Save(); }
         );
-        SettingsMenu.Spacer(right);
+        SettingsMenu.Label(right, "Blood decals lifetime", GUIStyle.SubHeadingFont);
+        SettingsMenu.Slider(
+          right, (0, 10), 101,
+          v => Math.Round(v, 2).ToString(),
+          Mod.Config.GlobalDecalLifetime,
+          v => { Mod.Config.GlobalDecalLifetime = (float)Math.Round(v, 2); ConfigManager.Save(); }
+        );
+        //SettingsMenu.Spacer(right);
       }
     }
   }

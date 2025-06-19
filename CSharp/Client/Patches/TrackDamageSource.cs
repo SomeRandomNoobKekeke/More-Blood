@@ -56,7 +56,5 @@ namespace MoreBlood
     {
       DamageContext.Current = new MeleeDamageContext(__instance.Item);
     }
-
-
   }
 }
