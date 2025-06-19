@@ -18,7 +18,7 @@ namespace MoreBlood
     public float BloodAmountFromBleeding { get; set; } = 1.0f;
     public float LifetimeMultiplier { get; set; } = 1.0f;
     public float UnconciousPulseSpeed { get; set; } = 0.6f;
-    public float UnconciousBloodFlow { get; set; } = 0.2f;
+    public float UnconciousBloodFlow { get; set; } = 0.6f;
     public float BasicPulseSpeed { get; set; } = 7.0f;
     public float PulseSteepness { get; set; } = 8.0f;
     public float MinFlow { get; set; } = 0.23f;
