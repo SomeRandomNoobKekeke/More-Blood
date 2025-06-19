@@ -4,7 +4,7 @@
     <BloodAmountFromBleeding>1</BloodAmountFromBleeding>
     <LifetimeMultiplier>1</LifetimeMultiplier>
     <UnconciousPulseSpeed>0.6</UnconciousPulseSpeed>
-    <UnconciousBloodFlow>0.2</UnconciousBloodFlow>
+    <UnconciousBloodFlow>0.6</UnconciousBloodFlow>
     <BasicPulseSpeed>7</BasicPulseSpeed>
     <PulseSteepness>8</PulseSteepness>
     <MinFlow>0.23</MinFlow>
@@ -34,6 +34,7 @@
   <DecalDrawDepth>0.6</DecalDrawDepth>
   <GlobalBloodAmount>1</GlobalBloodAmount>
   <GlobalDecalLifetime>1</GlobalDecalLifetime>
+  <DecalCleaningSpeed>0.1</DecalCleaningSpeed>
   <VitalityMultiplier>0.9</VitalityMultiplier>
   <Version>2.0.0</Version>
 </Config>
