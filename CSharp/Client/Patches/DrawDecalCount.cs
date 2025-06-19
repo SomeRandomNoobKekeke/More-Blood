@@ -28,7 +28,7 @@ namespace MoreBlood
     {
       if (Mod.Debug.ConsoleDebug || Mod.Debug.VisualDebug)
       {
-        Color cl = Mod.Config.GlobalBloodAmount == 1 ?
+        Color cl = Mod.Config.GlobalBloodAmount == 1 && Mod.Config.GlobalDecalLifetime == 1 ?
           ToolBox.GradientLerp(AdvancedDecal.cachedCount / TooMany, Color.Lime, Color.Yellow, Color.Orange, Color.Red) :
           Color.LightSlateGray;
         GUI.DrawString(spriteBatch, new Vector2(GameMain.GraphicsWidth / 2.0f - 70.0f, 0), $"Blood decals count:{AdvancedDecal.cachedCount}", cl);
