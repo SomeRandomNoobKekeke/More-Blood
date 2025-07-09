@@ -26,6 +26,7 @@ namespace MoreBlood
     public float GlobalDecalLifetime { get; set; } = 1.0f;
     public float DecalCleaningSpeed { get; set; } = 0.1f;
     public float VitalityMultiplier { get; set; } = 0.9f;
+    public float DamageOverlayThreshold { get; set; } = 0.3f;
     public string Version { get; set; } = "0.0.0";
   }
 

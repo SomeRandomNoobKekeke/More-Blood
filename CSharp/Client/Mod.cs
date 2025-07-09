@@ -82,6 +82,7 @@ namespace MoreBlood
       MenuIntegration.PatchAll(Harmony);
       DrawDecalCount.PatchAll(Harmony);
       Cleaning.PatchAll(Harmony);
+      DamageOverlay.PatchAll(Harmony);
     }
 
 
